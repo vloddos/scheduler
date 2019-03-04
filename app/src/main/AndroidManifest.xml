@@ -9,7 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -17,20 +17,20 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".WeekActivity"
+            android:name=".activities.WeekActivity"
             android:label="@string/week"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName=".activities.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.android.scheduler.MainActivity" />
+                android:value="com.example.android.scheduler.activities.MainActivity" />
         </activity>
         <activity
-            android:name=".DayActivity"
+            android:name=".activities.DayActivity"
             android:label="@string/day"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName=".activities.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.android.scheduler.MainActivity" />
+                android:value="com.example.android.scheduler.activities.MainActivity" />
         </activity>
     </application>
 

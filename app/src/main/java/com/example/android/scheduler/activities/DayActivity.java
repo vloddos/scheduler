@@ -1,7 +1,9 @@
-package com.example.android.scheduler;
+package com.example.android.scheduler.activities;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+
+import com.example.android.scheduler.R;
 
 public class DayActivity extends AppCompatActivity {
 
