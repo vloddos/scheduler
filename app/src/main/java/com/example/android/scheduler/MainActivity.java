@@ -1,6 +1,6 @@
 package com.example.android.scheduler;
 
-import android.icu.text.DateFormat;
+import android.content.Intent;
 import android.icu.util.Calendar;
 import android.os.Build;
 import android.os.Bundle;
@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
                     Calendar calendar = Calendar.getInstance();
                     calendar.set(year, month, dayOfMonth);
                     Toast.makeText(
-                            getApplicationContext(),
+                            this,
                             sdf.format(calendar.getTime()),
                             Toast.LENGTH_SHORT
                     ).show();
@@ -43,5 +43,13 @@ public class MainActivity extends AppCompatActivity {
 
     public void today(View view) {
         calendarView.setDate(new Date().getTime());
+    }
+
+    public void week(View view) {
+        startActivity(new Intent(this, WeekActivity.class));
+    }
+
+    public void day(View view) {
+        startActivity(new Intent(this, DayActivity.class));
     }
 }

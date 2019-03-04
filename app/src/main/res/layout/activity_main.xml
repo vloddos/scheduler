@@ -36,4 +36,28 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/calendar_month" />
 
+    <Button
+        android:id="@+id/week_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="12dp"
+        android:onClick="week"
+        android:text="@string/week"
+        app:layout_constraintStart_toEndOf="@+id/today_button"
+        app:layout_constraintTop_toBottomOf="@+id/calendar_month" />
+
+    <Button
+        android:id="@+id/day_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="12dp"
+        android:onClick="day"
+        android:text="@string/day"
+        app:layout_constraintStart_toEndOf="@+id/week_button"
+        app:layout_constraintTop_toBottomOf="@+id/calendar_month" />
+
 </android.support.constraint.ConstraintLayout>
