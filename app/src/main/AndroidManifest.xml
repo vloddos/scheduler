@@ -16,22 +16,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".activities.WeekActivity"
-            android:label="@string/week"
-            android:parentActivityName=".activities.MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.android.scheduler.activities.MainActivity" />
-        </activity>
-        <activity
-            android:name=".activities.DayActivity"
-            android:label="@string/day"
-            android:parentActivityName=".activities.MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.android.scheduler.activities.MainActivity" />
-        </activity>
     </application>
 
 </manifest>
