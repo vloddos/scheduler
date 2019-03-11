@@ -3,28 +3,50 @@ package com.example.android.scheduler.activities;
 import android.icu.util.Calendar;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
-import android.widget.Toast;
 
 import com.example.android.scheduler.R;
 import com.example.android.scheduler.fragments.DayFragment;
 import com.example.android.scheduler.fragments.MainFragmentPagerAdapter;
 import com.example.android.scheduler.fragments.MonthFragment;
 import com.example.android.scheduler.fragments.WeekFragment;
-import com.example.android.scheduler.global.Constants;
 import com.example.android.scheduler.global.Global;
 
-// TODO: 05.03.2019 week/week/day view in this activity
 public class MainActivity extends AppCompatActivity {
 
     public static final String LOG_TAG = MainActivity.class.getSimpleName();
 
     private ViewPager viewPager;
+    private ViewPager.OnPageChangeListener onPageChangeListener = new ViewPager.OnPageChangeListener() {
+
+        @Override
+        public void onPageScrolled(int i, float v, int i1) {
+
+        }
+
+        @Override
+        public void onPageSelected(int i) {
+            switch (i) {
+                case 0:
+                    monthFragment.setUserVisibleHint(true);
+                    break;
+                case 1:
+                    break;
+                case 2:
+                    dayFragment.setUserVisibleHint(true);
+                    break;
+            }
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int i) {
+
+        }
+    };
 
     public Calendar selectedCalendar;
     private SparseArray<String> daysOfWeek = new SparseArray<>();
@@ -49,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
 
         viewPager = findViewById(R.id.viewpager);
         viewPager.setAdapter(new MainFragmentPagerAdapter(getSupportFragmentManager(), this));
+        viewPager.addOnPageChangeListener(onPageChangeListener);
 
         TabLayout tabLayout = findViewById(R.id.tablayout);
         tabLayout.setupWithViewPager(viewPager);
@@ -96,20 +119,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void today(View view) {
         Global.selectedCalendar = null;
-
-        switch (viewPager.getCurrentItem()) {
-            case 0:
-                //monthFragment.calendarView.setDate(now.getTimeInMillis());
-                monthFragment.setUserVisibleHint(true);
-                break;
-            case 1:
-                break;
-            case 2:
-//                dayFragment.dayOfWeek.setText(daysOfWeek.get(now.get(Calendar.DAY_OF_WEEK)));
-//                dayFragment.dayOfMonth.setText(Constants.sdf.format(now.getTime()));
-                dayFragment.setUserVisibleHint(true);
-                break;
-        }
+        onPageChangeListener.onPageSelected(viewPager.getCurrentItem());
     }
 
     public void test(View view) {

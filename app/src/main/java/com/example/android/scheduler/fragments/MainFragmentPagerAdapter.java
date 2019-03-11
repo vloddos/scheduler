@@ -5,9 +5,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.util.Log;
-
-import com.example.android.scheduler.activities.MainActivity;
 
 public class MainFragmentPagerAdapter extends FragmentPagerAdapter {
 
@@ -21,8 +18,6 @@ public class MainFragmentPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int i) {
-        Log.i(MainActivity.LOG_TAG, "get item i=" + i);
-
         switch (i) {
             case 0:
                 return new MonthFragment();

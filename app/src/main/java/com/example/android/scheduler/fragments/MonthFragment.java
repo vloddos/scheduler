@@ -65,7 +65,7 @@ public class MonthFragment extends Fragment {
     }
 
     @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
+    public void setUserVisibleHint(boolean isVisibleToUser) {// TODO: 12.03.2019 remove/rename such methods
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser && viewCreated) {
             calendarView.setDate(
