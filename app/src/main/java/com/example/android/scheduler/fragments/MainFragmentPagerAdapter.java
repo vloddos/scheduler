@@ -11,7 +11,7 @@ import com.example.android.scheduler.activities.MainActivity;
 
 public class MainFragmentPagerAdapter extends FragmentPagerAdapter {
 
-    private String[] titles = {"Month", "Week", "Day"};
+    private String[] titles = {MonthFragment.title, WeekFragment.title, DayFragment.title};
     private Context context;
 
     public MainFragmentPagerAdapter(FragmentManager fm, Context context) {

@@ -3,34 +3,51 @@ package com.example.android.scheduler.activities;
 import android.icu.util.Calendar;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.util.SparseArray;
 import android.view.View;
-import android.widget.CalendarView;
-import android.widget.TableLayout;
-import android.widget.TableRow;
 import android.widget.Toast;
 
 import com.example.android.scheduler.R;
+import com.example.android.scheduler.fragments.DayFragment;
 import com.example.android.scheduler.fragments.MainFragmentPagerAdapter;
+import com.example.android.scheduler.fragments.MonthFragment;
+import com.example.android.scheduler.fragments.WeekFragment;
+import com.example.android.scheduler.global.Constants;
+import com.example.android.scheduler.global.Global;
 
-import java.util.Date;
-
-// TODO: 05.03.2019 month/week/day view in this activity
+// TODO: 05.03.2019 week/week/day view in this activity
 public class MainActivity extends AppCompatActivity {
 
     public static final String LOG_TAG = MainActivity.class.getSimpleName();
 
-    private CalendarView calendarView;
-    private Calendar selectedCalendar;
+    private ViewPager viewPager;
 
-    //@RequiresApi(api = Build.VERSION_CODES.N)
-    //@Override
+    public Calendar selectedCalendar;
+    private SparseArray<String> daysOfWeek = new SparseArray<>();
+
+    {
+        daysOfWeek.put(Calendar.MONDAY, "пн");
+        daysOfWeek.put(Calendar.TUESDAY, "вт");
+        daysOfWeek.put(Calendar.WEDNESDAY, "ср");
+        daysOfWeek.put(Calendar.THURSDAY, "чт");
+        daysOfWeek.put(Calendar.FRIDAY, "пт");
+        daysOfWeek.put(Calendar.SATURDAY, "сб");
+        daysOfWeek.put(Calendar.SUNDAY, "вс");
+    }
+
+    public MonthFragment monthFragment;
+    public WeekFragment weekFragment;
+    public DayFragment dayFragment;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ViewPager viewPager = findViewById(R.id.viewpager);
+        viewPager = findViewById(R.id.viewpager);
         viewPager.setAdapter(new MainFragmentPagerAdapter(getSupportFragmentManager(), this));
 
         TabLayout tabLayout = findViewById(R.id.tablayout);
@@ -65,12 +82,12 @@ public class MainActivity extends AppCompatActivity {
 //
 //        calendarView = findViewById(R.id.calendarView);
 //        calendarView.setOnDateChangeListener(
-//                (view, year, month, dayOfMonth) -> {
+//                (view, year, week, dayOfMonth) -> {
 //                    selectedCalendar = Calendar.getInstance();
-//                    selectedCalendar.set(year, month, dayOfMonth);
+//                    selectedCalendar.set(year, week, dayOfMonth);
 //                    Toast.makeText(
 //                            this,
-//                            Constants.sdf.format(selectedCalendar.getTime()),
+//                            Constants.fdf.format(selectedCalendar.getTime()),
 //                            Toast.LENGTH_SHORT
 //                    ).show();
 //                }
@@ -78,28 +95,79 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void today(View view) {
-        selectedCalendar = null;
-        calendarView.setDate(new Date().getTime());
-//        Toast.makeText(
-//                this,
-//                //((ConstraintLayout) view.getParent()).get
-//                Toast.LENGTH_SHORT
-//        ).show();
+        Global.selectedCalendar = null;
+
+        switch (viewPager.getCurrentItem()) {
+            case 0:
+                //monthFragment.calendarView.setDate(now.getTimeInMillis());
+                monthFragment.setUserVisibleHint(true);
+                break;
+            case 1:
+                break;
+            case 2:
+//                dayFragment.dayOfWeek.setText(daysOfWeek.get(now.get(Calendar.DAY_OF_WEEK)));
+//                dayFragment.dayOfMonth.setText(Constants.sdf.format(now.getTime()));
+                dayFragment.setUserVisibleHint(true);
+                break;
+        }
     }
 
     public void test(View view) {
-        Toast.makeText(
-                this,
-                "" + ((TableRow) view.getParent()).indexOfChild(view),
-                Toast.LENGTH_SHORT
-        ).show();
+
     }
 
-//    public void week(View view) {
-//        startActivity(new Intent(this, WeekActivity.class));
-//    }
-//
-//    public void day(View view) {
-//        startActivity(new Intent(this, DayActivity.class));
-//    }
+    public void getWeek(Calendar calendar) {
+        calendar.get(Calendar.WEEK_OF_YEAR);
+    }
 }
+
+/*
+@RequiresApi(api = Build.VERSION_CODES.N)
+    public void today(View view) {
+        Global.selectedCalendar = null;
+        Calendar now = Calendar.getInstance();
+
+        int i = viewPager.getCurrentItem();
+        Log.i(LOG_TAG, "" + i);
+        switch (i) {
+            case 0:
+                ((CalendarView) findViewById(R.id.fragment_month)).setDate(now.getTimeInMillis());
+                break;
+            case 1:
+                Log.i(LOG_TAG, "" + (findViewById(R.id.mon) != null));
+                Log.i(LOG_TAG, "" + (findViewById(R.id.tue) != null));
+                Log.i(LOG_TAG, "" + (findViewById(R.id.wed) != null));
+                Log.i(LOG_TAG, "" + (findViewById(R.id.thu) != null));
+                Log.i(LOG_TAG, "" + (findViewById(R.id.fri) != null));
+                Log.i(LOG_TAG, "" + (findViewById(R.id.sat) != null));
+                Log.i(LOG_TAG, "" + (findViewById(R.id.sun) != null));
+                break;
+            case 2:
+                switch (now.get(Calendar.DAY_OF_WEEK)) {
+                    case Calendar.MONDAY:
+                        ((TextView) findViewById(R.id.day_of_week)).setText("пн");
+                        break;
+                    case Calendar.TUESDAY:
+                        ((TextView) findViewById(R.id.day_of_week)).setText("вт");
+                        break;
+                    case Calendar.WEDNESDAY:
+                        ((TextView) findViewById(R.id.day_of_week)).setText("ср");
+                        break;
+                    case Calendar.THURSDAY:
+                        ((TextView) findViewById(R.id.day_of_week)).setText("чт");
+                        break;
+                    case Calendar.FRIDAY:
+                        ((TextView) findViewById(R.id.day_of_week)).setText("пт");
+                        break;
+                    case Calendar.SATURDAY:
+                        ((TextView) findViewById(R.id.day_of_week)).setText("сб");
+                        break;
+                    case Calendar.SUNDAY:
+                        ((TextView) findViewById(R.id.day_of_week)).setText("вс");
+                        break;
+                }
+                ((TextView) findViewById(R.id.day_of_month)).setText(Constants.sdf.format(now.getTime()));
+                break;
+        }
+    }
+ */
