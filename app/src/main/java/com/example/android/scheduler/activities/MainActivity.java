@@ -4,6 +4,9 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 
 import com.example.android.scheduler.R;
@@ -52,33 +55,6 @@ public class MainActivity extends AppCompatActivity {
 
         TabLayout tabLayout = findViewById(R.id.tablayout);
         tabLayout.setupWithViewPager(viewPager);
-
-        /*findViewById(R.id.days).setOnTouchListener((v, event) -> {
-            //Log.i(LOG_TAG, event.getAction());
-            //int action = MotionEventCompat.getActionMasked(event);
-
-            switch (event.getAction()) {
-                case (MotionEvent.ACTION_DOWN):
-                    Log.i(LOG_TAG, "Action was DOWN");
-                    return true;
-                case (MotionEvent.ACTION_MOVE):
-                    Log.i(LOG_TAG, "Action was MOVE");
-                    return true;
-                case (MotionEvent.ACTION_UP):
-                    Log.i(LOG_TAG, "Action was UP");
-                    return true;
-                case (MotionEvent.ACTION_CANCEL):
-                    Log.i(LOG_TAG, "Action was CANCEL");
-                    return true;
-                case (MotionEvent.ACTION_OUTSIDE):
-                    Log.i(LOG_TAG, "Movement occurred outside bounds " +
-                            "of current screen element");
-                    return true;
-            }
-
-            Log.i(LOG_TAG, "" + event.getAction());
-            return false;
-        });*/
     }
 
     public void today(View view) {
@@ -87,6 +63,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void test(View view) {
+        new View.OnTouchListener() {
 
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return false;
+            }
+        };
+        new GestureDetector.SimpleOnGestureListener() {
+
+        };
     }
 }

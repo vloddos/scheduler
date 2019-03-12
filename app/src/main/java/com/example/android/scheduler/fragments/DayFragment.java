@@ -8,6 +8,7 @@ import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.android.scheduler.R;
@@ -37,6 +38,9 @@ public class DayFragment extends Fragment implements Selectable {
     public TextView dayOfWeek;
     public TextView dayOfMonth;
 
+    public Button leftButton;
+    public Button rightButton;
+
     public DayFragment() {
     }
 
@@ -59,6 +63,12 @@ public class DayFragment extends Fragment implements Selectable {
         dayOfWeek = view.findViewById(R.id.day_of_week);
         dayOfMonth = view.findViewById(R.id.day_of_month);
 
+        leftButton = view.findViewById(R.id.leftButton);
+        leftButton.setOnClickListener(this::change);
+
+        rightButton = view.findViewById(R.id.rightButton);
+        rightButton.setOnClickListener(this::change);
+
         return view;
     }
 
@@ -67,5 +77,14 @@ public class DayFragment extends Fragment implements Selectable {
         Calendar calendar = Optional.ofNullable(Global.selectedCalendar).orElse(Calendar.getInstance());
         dayOfWeek.setText(daysOfWeek.get(calendar.get(Calendar.DAY_OF_WEEK)));
         dayOfMonth.setText(Constants.shortDateFormat.format(calendar.getTime()));
+    }
+
+    public void change(View view) {
+        if (Global.selectedCalendar == null)
+            Global.selectedCalendar = Calendar.getInstance();
+
+        Global.selectedCalendar.add(Calendar.DAY_OF_MONTH, view.getId() == leftButton.getId() ? -1 : 1);
+
+        select();
     }
 }

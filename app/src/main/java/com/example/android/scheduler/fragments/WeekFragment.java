@@ -15,8 +15,6 @@ import com.example.android.scheduler.global.Constants;
 import com.example.android.scheduler.global.Global;
 
 import java.util.Calendar;
-import java.util.Locale;
-import java.util.function.Consumer;
 
 public class WeekFragment extends Fragment implements Selectable {
 
@@ -124,4 +122,5 @@ public class WeekFragment extends Fragment implements Selectable {
             weekYears[i].setText(s[2]);
         }
     }
+    // TODO: 13.03.2019 scroll view??? 
 }

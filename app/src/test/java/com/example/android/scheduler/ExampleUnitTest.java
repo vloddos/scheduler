@@ -4,11 +4,7 @@ import com.example.android.scheduler.global.Constants;
 
 import org.junit.Test;
 
-import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
 
 import static org.junit.Assert.assertEquals;
 
@@ -24,11 +20,11 @@ public class ExampleUnitTest {
     }
 
     @Test
-    public void locale() {
-        System.out.println(
-                Arrays.toString(
-                        Constants.shortDateFormat.format(new Date()).split(" ")
-                )
-        );
+    public void calendar_roll() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(2019, 11, 31);
+        System.out.println(Constants.shortDateFormat.format(calendar.getTime()));
+        calendar.add(Calendar.DAY_OF_MONTH, 1);
+        System.out.println(Constants.shortDateFormat.format(calendar.getTime()));
     }
 }

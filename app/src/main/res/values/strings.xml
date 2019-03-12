@@ -4,4 +4,6 @@
     <string name="week">Week</string>
     <string name="day">Day</string>
     <string name="month">Month</string>
+    <string name="lt">&lt;</string>
+    <string name="gt">&gt;</string>
 </resources>
