@@ -1,6 +1,7 @@
 package com.example.android.scheduler.global;
 
-import android.icu.util.Calendar;
+
+import java.util.Calendar;
 
 public class Global {
 

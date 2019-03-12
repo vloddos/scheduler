@@ -1,7 +1,6 @@
 package com.example.android.scheduler.fragments;
 
 import android.content.Context;
-import android.icu.util.Calendar;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -16,13 +15,14 @@ import com.example.android.scheduler.activities.MainActivity;
 import com.example.android.scheduler.global.Constants;
 import com.example.android.scheduler.global.Global;
 
+import java.util.Calendar;
 import java.util.Optional;
 
 public class DayFragment extends Fragment implements Selectable {
 
     public static final String title = "day";
 
-    private static SparseArray<String> daysOfWeek = new SparseArray<>();
+    private static final SparseArray<String> daysOfWeek = new SparseArray<>();
 
     static {
         daysOfWeek.put(Calendar.MONDAY, "пн");
@@ -49,7 +49,6 @@ public class DayFragment extends Fragment implements Selectable {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setUserVisibleHint(false);
     }
 
     @Override

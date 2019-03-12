@@ -1,7 +1,6 @@
 package com.example.android.scheduler.fragments;
 
 import android.content.Context;
-import android.icu.util.Calendar;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -16,6 +15,7 @@ import com.example.android.scheduler.activities.MainActivity;
 import com.example.android.scheduler.global.Constants;
 import com.example.android.scheduler.global.Global;
 
+import java.util.Calendar;
 import java.util.Optional;
 
 public class MonthFragment extends Fragment implements Selectable {
@@ -36,7 +36,6 @@ public class MonthFragment extends Fragment implements Selectable {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setUserVisibleHint(false);
     }
 
     @Override
@@ -48,6 +47,7 @@ public class MonthFragment extends Fragment implements Selectable {
         calendarView.setOnDateChangeListener(
                 (view, year, month, dayOfMonth) -> {
                     Global.selectedCalendar = Calendar.getInstance();
+                    //Global.selectedCalendar.clear();
                     Global.selectedCalendar.set(year, month, dayOfMonth);
                     Toast.makeText(
                             getActivity(),

@@ -248,49 +248,49 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/mon"
+                android:id="@+id/mondayNumber"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center" />
 
             <TextView
-                android:id="@+id/tue"
+                android:id="@+id/tuesdayNumber"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center" />
 
             <TextView
-                android:id="@+id/wed"
+                android:id="@+id/wednesdayNumber"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center" />
 
             <TextView
-                android:id="@+id/thu"
+                android:id="@+id/thursdayNumber"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center" />
 
             <TextView
-                android:id="@+id/fri"
+                android:id="@+id/fridayNumber"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center" />
 
             <TextView
-                android:id="@+id/sat"
+                android:id="@+id/saturdayNumber"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center" />
 
             <TextView
-                android:id="@+id/sun"
+                android:id="@+id/sundayNumber"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

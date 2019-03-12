@@ -1,10 +1,8 @@
 package com.example.android.scheduler;
 
-import android.icu.util.Calendar;
-
-import com.example.android.scheduler.global.Constants;
-
 import org.junit.Test;
+
+import java.util.Calendar;
 
 import static org.junit.Assert.assertEquals;
 
@@ -21,14 +19,6 @@ public class ExampleUnitTest {
 
     @Test
     public void setWeek() {
-//        Calendar c = Calendar.getInstance();
-//
-//        System.out.println(Constants.sdf.format(c.getTime()));
-//
-//        int w = c.get(Calendar.WEEK_OF_YEAR);
-//        System.out.println(w);
-//        c.set(Calendar.WEEK_OF_YEAR, w);
-//
-//        System.out.println(Constants.sdf.format(c.getTime()));
+
     }
 }

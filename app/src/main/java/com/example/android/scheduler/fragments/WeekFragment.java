@@ -11,18 +11,33 @@ import android.widget.TextView;
 
 import com.example.android.scheduler.R;
 import com.example.android.scheduler.activities.MainActivity;
+import com.example.android.scheduler.global.Global;
+
+import java.util.Calendar;
 
 public class WeekFragment extends Fragment implements Selectable {
 
+    private static final int[] daysOfWeek = new int[]{
+            Calendar.MONDAY,
+            Calendar.TUESDAY,
+            Calendar.WEDNESDAY,
+            Calendar.THURSDAY,
+            Calendar.FRIDAY,
+            Calendar.SATURDAY,
+            Calendar.SUNDAY
+    };
+
     public static final String title = "week";
 
-    public TextView mon;
-    public TextView tue;
-    public TextView wed;
-    public TextView thu;
-    public TextView fri;
-    public TextView sat;
-    public TextView sun;
+    private TextView[] weekNumbers;
+
+    public TextView mondayNumber;
+    public TextView tuesdayNumber;
+    public TextView wednesdayNumber;
+    public TextView thursdayNumber;
+    public TextView fridayNumber;
+    public TextView saturdayNumber;
+    public TextView sundayNumber;
 
     public WeekFragment() {
     }
@@ -36,7 +51,6 @@ public class WeekFragment extends Fragment implements Selectable {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setUserVisibleHint(false);
     }
 
     @Override
@@ -44,19 +58,28 @@ public class WeekFragment extends Fragment implements Selectable {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_week, container, false);
 
-        mon = view.findViewById(R.id.mon);
-        tue = view.findViewById(R.id.tue);
-        wed = view.findViewById(R.id.wed);
-        thu = view.findViewById(R.id.thu);
-        fri = view.findViewById(R.id.fri);
-        sat = view.findViewById(R.id.sat);
-        sun = view.findViewById(R.id.sun);
+        weekNumbers = new TextView[]{
+                mondayNumber = view.findViewById(R.id.mondayNumber),
+                tuesdayNumber = view.findViewById(R.id.tuesdayNumber),
+                wednesdayNumber = view.findViewById(R.id.wednesdayNumber),
+                thursdayNumber = view.findViewById(R.id.thursdayNumber),
+                fridayNumber = view.findViewById(R.id.fridayNumber),
+                saturdayNumber = view.findViewById(R.id.saturdayNumber),
+                sundayNumber = view.findViewById(R.id.sundayNumber)
+        };
 
         return view;
     }
 
     @Override
     public void select() {
+        Calendar calendar = Global.selectedCalendar;
+        calendar = calendar == null ? Calendar.getInstance() : (Calendar) calendar.clone();
+        //Log.i(MainActivity.LOG_TAG, "day=" + calendar.get(Calendar.DAY_OF_MONTH));
 
+        for (int i = 0; i < weekNumbers.length; ++i) {
+            calendar.set(Calendar.DAY_OF_WEEK, daysOfWeek[i]);
+            weekNumbers[i].setText("" + calendar.get(Calendar.DAY_OF_MONTH));
+        }
     }
 }
