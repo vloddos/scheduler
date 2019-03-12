@@ -66,6 +66,6 @@ public class DayFragment extends Fragment implements Selectable {
     public void select() {
         Calendar calendar = Optional.ofNullable(Global.selectedCalendar).orElse(Calendar.getInstance());
         dayOfWeek.setText(daysOfWeek.get(calendar.get(Calendar.DAY_OF_WEEK)));
-        dayOfMonth.setText(Constants.sdf.format(calendar.getTime()));
+        dayOfMonth.setText(Constants.shortDateFormat.format(calendar.getTime()));
     }
 }

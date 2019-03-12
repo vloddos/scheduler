@@ -11,9 +11,12 @@ import android.widget.TextView;
 
 import com.example.android.scheduler.R;
 import com.example.android.scheduler.activities.MainActivity;
+import com.example.android.scheduler.global.Constants;
 import com.example.android.scheduler.global.Global;
 
 import java.util.Calendar;
+import java.util.Locale;
+import java.util.function.Consumer;
 
 public class WeekFragment extends Fragment implements Selectable {
 
@@ -29,15 +32,32 @@ public class WeekFragment extends Fragment implements Selectable {
 
     public static final String title = "week";
 
-    private TextView[] weekNumbers;
+    private TextView[] weekDays;
+    public TextView mondayDay;
+    public TextView tuesdayDay;
+    public TextView wednesdayDay;
+    public TextView thursdayDay;
+    public TextView fridayDay;
+    public TextView saturdayDay;
+    public TextView sundayDay;
 
-    public TextView mondayNumber;
-    public TextView tuesdayNumber;
-    public TextView wednesdayNumber;
-    public TextView thursdayNumber;
-    public TextView fridayNumber;
-    public TextView saturdayNumber;
-    public TextView sundayNumber;
+    private TextView[] weekMonths;
+    public TextView mondayMonth;
+    public TextView tuesdayMonth;
+    public TextView wednesdayMonth;
+    public TextView thursdayMonth;
+    public TextView fridayMonth;
+    public TextView saturdayMonth;
+    public TextView sundayMonth;
+
+    private TextView[] weekYears;
+    public TextView mondayYear;
+    public TextView tuesdayYear;
+    public TextView wednesdayYear;
+    public TextView thursdayYear;
+    public TextView fridayYear;
+    public TextView saturdayYear;
+    public TextView sundayYear;
 
     public WeekFragment() {
     }
@@ -58,14 +78,34 @@ public class WeekFragment extends Fragment implements Selectable {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_week, container, false);
 
-        weekNumbers = new TextView[]{
-                mondayNumber = view.findViewById(R.id.mondayNumber),
-                tuesdayNumber = view.findViewById(R.id.tuesdayNumber),
-                wednesdayNumber = view.findViewById(R.id.wednesdayNumber),
-                thursdayNumber = view.findViewById(R.id.thursdayNumber),
-                fridayNumber = view.findViewById(R.id.fridayNumber),
-                saturdayNumber = view.findViewById(R.id.saturdayNumber),
-                sundayNumber = view.findViewById(R.id.sundayNumber)
+        weekDays = new TextView[]{
+                mondayDay = view.findViewById(R.id.mondayDay),
+                tuesdayDay = view.findViewById(R.id.tuesdayDay),
+                wednesdayDay = view.findViewById(R.id.wednesdayDay),
+                thursdayDay = view.findViewById(R.id.thursdayDay),
+                fridayDay = view.findViewById(R.id.fridayDay),
+                saturdayDay = view.findViewById(R.id.saturdayDay),
+                sundayDay = view.findViewById(R.id.sundayDay)
+        };
+
+        weekMonths = new TextView[]{
+                mondayMonth = view.findViewById(R.id.mondayMonth),
+                tuesdayMonth = view.findViewById(R.id.tuesdayMonth),
+                wednesdayMonth = view.findViewById(R.id.wednesdayMonth),
+                thursdayMonth = view.findViewById(R.id.thursdayMonth),
+                fridayMonth = view.findViewById(R.id.fridayMonth),
+                saturdayMonth = view.findViewById(R.id.saturdayMonth),
+                sundayMonth = view.findViewById(R.id.sundayMonth)
+        };
+
+        weekYears = new TextView[]{
+                mondayYear = view.findViewById(R.id.mondayYear),
+                tuesdayYear = view.findViewById(R.id.tuesdayYear),
+                wednesdayYear = view.findViewById(R.id.wednesdayYear),
+                thursdayYear = view.findViewById(R.id.thursdayYear),
+                fridayYear = view.findViewById(R.id.fridayYear),
+                saturdayYear = view.findViewById(R.id.saturdayYear),
+                sundayYear = view.findViewById(R.id.sundayYear)
         };
 
         return view;
@@ -75,11 +115,13 @@ public class WeekFragment extends Fragment implements Selectable {
     public void select() {
         Calendar calendar = Global.selectedCalendar;
         calendar = calendar == null ? Calendar.getInstance() : (Calendar) calendar.clone();
-        //Log.i(MainActivity.LOG_TAG, "day=" + calendar.get(Calendar.DAY_OF_MONTH));
 
-        for (int i = 0; i < weekNumbers.length; ++i) {
+        for (int i = 0; i < weekDays.length; ++i) {
             calendar.set(Calendar.DAY_OF_WEEK, daysOfWeek[i]);
-            weekNumbers[i].setText("" + calendar.get(Calendar.DAY_OF_MONTH));
+            String[] s = Constants.shortDateFormat.format(calendar.getTime()).split("\\.");
+            weekDays[i].setText(s[0]);
+            weekMonths[i].setText(s[1]);
+            weekYears[i].setText(s[2]);
         }
     }
 }

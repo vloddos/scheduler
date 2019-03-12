@@ -47,11 +47,10 @@ public class MonthFragment extends Fragment implements Selectable {
         calendarView.setOnDateChangeListener(
                 (view, year, month, dayOfMonth) -> {
                     Global.selectedCalendar = Calendar.getInstance();
-                    //Global.selectedCalendar.clear();
                     Global.selectedCalendar.set(year, month, dayOfMonth);
                     Toast.makeText(
                             getActivity(),
-                            Constants.fdf.format(Global.selectedCalendar.getTime()),
+                            Constants.fullDateFormat.format(Global.selectedCalendar.getTime()),
                             Toast.LENGTH_SHORT
                     ).show();
                 }

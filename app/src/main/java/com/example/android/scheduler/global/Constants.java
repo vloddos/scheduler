@@ -5,6 +5,7 @@ import java.util.Locale;
 
 public class Constants {
 
-    public static final SimpleDateFormat fdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
-    public static final SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy", Locale.ENGLISH);
+    // FIXME: 13.03.2019 threadlocal SimpleDateFormat?
+    public static final SimpleDateFormat fullDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
+    public static final SimpleDateFormat shortDateFormat = new SimpleDateFormat("dd.MM.yyyy", new Locale("ru"));
 }
