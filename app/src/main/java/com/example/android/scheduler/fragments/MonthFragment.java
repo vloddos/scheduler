@@ -18,11 +18,9 @@ import com.example.android.scheduler.global.Global;
 
 import java.util.Optional;
 
-public class MonthFragment extends Fragment {
+public class MonthFragment extends Fragment implements Selectable {
 
     public static final String title = "month";
-
-    private boolean viewCreated;
 
     public CalendarView calendarView;
 
@@ -59,31 +57,15 @@ public class MonthFragment extends Fragment {
                 }
         );
 
-        viewCreated = true;
-
         return v;
     }
 
     @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {// TODO: 12.03.2019 remove/rename such methods
-        super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser && viewCreated) {
-            calendarView.setDate(
-                    Optional.ofNullable(Global.selectedCalendar)
-                            .orElse(Calendar.getInstance())
-                            .getTimeInMillis()
-            );
-        }
-    }
-
-    public void month() {
-        Optional.ofNullable(getActivity()).ifPresent(
-                activity ->
-                        Toast.makeText(
-                                activity,
-                                "month",
-                                Toast.LENGTH_SHORT
-                        ).show()
+    public void select() {
+        calendarView.setDate(
+                Optional.ofNullable(Global.selectedCalendar)
+                        .orElse(Calendar.getInstance())
+                        .getTimeInMillis()
         );
     }
 }

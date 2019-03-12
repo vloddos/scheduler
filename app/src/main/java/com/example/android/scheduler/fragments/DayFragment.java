@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.android.scheduler.R;
 import com.example.android.scheduler.activities.MainActivity;
@@ -19,7 +18,7 @@ import com.example.android.scheduler.global.Global;
 
 import java.util.Optional;
 
-public class DayFragment extends Fragment {
+public class DayFragment extends Fragment implements Selectable {
 
     public static final String title = "day";
 
@@ -34,8 +33,6 @@ public class DayFragment extends Fragment {
         daysOfWeek.put(Calendar.SATURDAY, "сб");
         daysOfWeek.put(Calendar.SUNDAY, "вс");
     }
-
-    private boolean viewCreated;
 
     public TextView dayOfWeek;
     public TextView dayOfMonth;
@@ -63,29 +60,13 @@ public class DayFragment extends Fragment {
         dayOfWeek = view.findViewById(R.id.day_of_week);
         dayOfMonth = view.findViewById(R.id.day_of_month);
 
-        viewCreated = true;
-
         return view;
     }
 
     @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser && viewCreated) {
-            Calendar calendar = Optional.ofNullable(Global.selectedCalendar).orElse(Calendar.getInstance());
-            dayOfWeek.setText(daysOfWeek.get(calendar.get(Calendar.DAY_OF_WEEK)));
-            dayOfMonth.setText(Constants.sdf.format(calendar.getTime()));
-        }
-    }
-
-    public void day() {
-        Optional.ofNullable(getActivity()).ifPresent(
-                activity ->
-                        Toast.makeText(
-                                activity,
-                                "day",
-                                Toast.LENGTH_SHORT
-                        ).show()
-        );
+    public void select() {
+        Calendar calendar = Optional.ofNullable(Global.selectedCalendar).orElse(Calendar.getInstance());
+        dayOfWeek.setText(daysOfWeek.get(calendar.get(Calendar.DAY_OF_WEEK)));
+        dayOfMonth.setText(Constants.sdf.format(calendar.getTime()));
     }
 }

@@ -8,18 +8,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.android.scheduler.R;
 import com.example.android.scheduler.activities.MainActivity;
 
-import java.util.Optional;
-
-public class WeekFragment extends Fragment {
+public class WeekFragment extends Fragment implements Selectable {
 
     public static final String title = "week";
-
-    private boolean viewCreated;
 
     public TextView mon;
     public TextView tue;
@@ -57,26 +52,11 @@ public class WeekFragment extends Fragment {
         sat = view.findViewById(R.id.sat);
         sun = view.findViewById(R.id.sun);
 
-        viewCreated = true;
-
         return view;
     }
 
     @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser && viewCreated) ;
+    public void select() {
 
-    }
-
-    public void week() {
-        Optional.ofNullable(getActivity()).ifPresent(
-                activity ->
-                        Toast.makeText(
-                                activity,
-                                "week",
-                                Toast.LENGTH_SHORT
-                        ).show()
-        );
     }
 }

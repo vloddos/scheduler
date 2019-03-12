@@ -8,11 +8,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
+import android.widget.Toast;
 
 import com.example.android.scheduler.R;
 import com.example.android.scheduler.fragments.DayFragment;
 import com.example.android.scheduler.fragments.MainFragmentPagerAdapter;
 import com.example.android.scheduler.fragments.MonthFragment;
+import com.example.android.scheduler.fragments.Selectable;
 import com.example.android.scheduler.fragments.WeekFragment;
 import com.example.android.scheduler.global.Global;
 
@@ -30,16 +32,8 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onPageSelected(int i) {
-            switch (i) {
-                case 0:
-                    monthFragment.setUserVisibleHint(true);
-                    break;
-                case 1:
-                    break;
-                case 2:
-                    dayFragment.setUserVisibleHint(true);
-                    break;
-            }
+            MainActivity self = MainActivity.this;
+            new Selectable[]{self.monthFragment, self.weekFragment, self.dayFragment}[i].select();
         }
 
         @Override
