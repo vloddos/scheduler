@@ -16,7 +16,7 @@ import com.example.android.scheduler.global.Global;
 
 import java.util.Calendar;
 
-public class WeekFragment extends Fragment implements Selectable {
+public class WeekFragment extends Fragment implements Selectable,EventSettable {
 
     private static final int[] daysOfWeek = new int[]{
             Calendar.MONDAY,
@@ -122,5 +122,10 @@ public class WeekFragment extends Fragment implements Selectable {
             weekYears[i].setText(s[2]);
         }
     }
-    // TODO: 13.03.2019 scroll view??? 
+
+    @Override
+    public void setEvents() {
+
+    }
+    // TODO: 13.03.2019 scroll view???
 }

@@ -1,21 +1,25 @@
 package com.example.android.scheduler.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.GestureDetector;
-import android.view.MotionEvent;
 import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.android.scheduler.R;
 import com.example.android.scheduler.fragments.DayFragment;
+import com.example.android.scheduler.fragments.EventSettable;
 import com.example.android.scheduler.fragments.MainFragmentPagerAdapter;
 import com.example.android.scheduler.fragments.MonthFragment;
 import com.example.android.scheduler.fragments.Selectable;
 import com.example.android.scheduler.fragments.WeekFragment;
 import com.example.android.scheduler.global.Global;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -32,7 +36,9 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onPageSelected(int i) {
             MainActivity self = MainActivity.this;
-            new Selectable[]{self.monthFragment, self.weekFragment, self.dayFragment}[i].select();
+            Fragment f = new Fragment[]{self.monthFragment, self.weekFragment, self.dayFragment}[i];
+            ((Selectable) f).select();
+            ((EventSettable) f).setEvents();
         }
 
         @Override
@@ -47,6 +53,8 @@ public class MainActivity extends AppCompatActivity {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //ApplicationStarter.initialize(this, true);
+
         setContentView(R.layout.activity_main);
 
         viewPager = findViewById(R.id.viewpager);
@@ -62,16 +70,15 @@ public class MainActivity extends AppCompatActivity {
         onPageChangeListener.onPageSelected(viewPager.getCurrentItem());
     }
 
-    public void test(View view) {
-        new View.OnTouchListener() {
-
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                return false;
-            }
-        };
-        new GestureDetector.SimpleOnGestureListener() {
-
-        };
+    public void eventListActivity(TextView textView) {
+        switch (viewPager.getCurrentItem()) {
+            case 1:
+                break;
+            case 2:
+                Intent intent = new Intent(this, EventListActivity.class);
+                intent.putExtra("eventList", dayFragment.getEvents(textView));
+                startActivity(intent);
+                break;
+        }
     }
 }

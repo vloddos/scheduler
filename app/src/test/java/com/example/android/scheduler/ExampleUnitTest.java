@@ -4,9 +4,12 @@ import com.example.android.scheduler.global.Constants;
 
 import org.junit.Test;
 
+import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -20,11 +23,32 @@ public class ExampleUnitTest {
     }
 
     @Test
-    public void calendar_roll() {
+    public void string_join_test() {
+        assertEquals("", String.join(";", new ArrayList<>()));
+    }
+
+    @Test
+    public void calendar_setTime() throws ParseException {
         Calendar calendar = Calendar.getInstance();
-        calendar.set(2019, 11, 31);
-        System.out.println(Constants.shortDateFormat.format(calendar.getTime()));
-        calendar.add(Calendar.DAY_OF_MONTH, 1);
-        System.out.println(Constants.shortDateFormat.format(calendar.getTime()));
+        System.out.println(Constants.fullDateFormat.format(calendar.getTime()));
+        calendar.setTime(Constants.shortDateFormat.parse("06.08.2005"));
+        System.out.println(Constants.fullDateFormat.format(calendar.getTime()));
+        calendar.add(Calendar.DAY_OF_YEAR, 1);
+        System.out.println(Constants.fullDateFormat.format(calendar.getTime()));
+        calendar.add(Calendar.SECOND, -1);
+        System.out.println(Constants.fullDateFormat.format(calendar.getTime()));
+    }
+
+    @Test
+    public void calendar_set_hour() {
+        Calendar calendar = Calendar.getInstance();
+        System.out.println(Constants.fullDateFormat.format(calendar.getTime()));
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        System.out.println(Constants.fullDateFormat.format(calendar.getTime()));
+    }
+
+    @Test
+    public void substring() {
+        System.out.println("1234abc".substring(0, 5));
     }
 }

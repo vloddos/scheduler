@@ -18,7 +18,7 @@ import com.example.android.scheduler.global.Global;
 import java.util.Calendar;
 import java.util.Optional;
 
-public class MonthFragment extends Fragment implements Selectable {
+public class MonthFragment extends Fragment implements Selectable,EventSettable {
 
     public static final String title = "month";
 
@@ -66,5 +66,12 @@ public class MonthFragment extends Fragment implements Selectable {
                         .orElse(Calendar.getInstance())
                         .getTimeInMillis()
         );
+
+
+    }
+
+    @Override
+    public void setEvents() {
+
     }
 }
