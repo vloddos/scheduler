@@ -1,9 +1,12 @@
 package com.example.android.scheduler;
 
+import android.widget.TextView;
+
 import com.example.android.scheduler.global.Constants;
 
 import org.junit.Test;
 
+import java.io.Serializable;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -45,6 +48,11 @@ public class ExampleUnitTest {
         System.out.println(Constants.fullDateFormat.format(calendar.getTime()));
         calendar.set(Calendar.HOUR_OF_DAY, 0);
         System.out.println(Constants.fullDateFormat.format(calendar.getTime()));
+    }
+
+    @Test
+    public void text_view(){
+        System.out.println(TextView.class instanceof Serializable);
     }
 
     @Test

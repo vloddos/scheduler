@@ -4,6 +4,7 @@ import com.example.android.scheduler.global.CalendarInterval;
 
 import java.io.Serializable;
 
+// TODO: 18.03.2019 remove seconds
 public class Event implements Serializable {
 
     private static final long serialVersionUID = -8023521667978959263L;
