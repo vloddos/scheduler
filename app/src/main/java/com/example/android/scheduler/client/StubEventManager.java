@@ -42,6 +42,31 @@ public class StubEventManager implements EventService {
                         "97wgfe99731fgg382ewfojscndjbsfvjkxcvxc"
                 )
         );
+
+        from.setTime(Constants.fullDateFormat.parse("2019-03-17 15:00:00"));
+        to.setTime(Constants.fullDateFormat.parse("2019-03-17 15:10:00"));
+        eventList.add(
+                new Event(
+                        0,
+                        "second event",
+                        new CalendarInterval(from, to),
+                        "3749t0294t940gwrijsfvjbdn cln derbln coijeprogjv09wo4rsvofxblkrsgbb"
+                )
+        );
+
+        from.setTime(Constants.fullDateFormat.parse("2019-03-17 15:02:28"));
+        to.setTime(Constants.fullDateFormat.parse("2019-03-17 15:13:37"));
+        eventList.add(
+                new Event(
+                        0,
+                        "event with long name",
+                        new CalendarInterval(from, to),
+                        "3749t0294t940gwrijsfvjbdn cln derbln coijeprogjv09wo4rsvofxblkrsgbb" +
+                                "3749t0294t940gwrijsfvjbdn cln derbln coijeprogjv09wo4rsvofxblkrsgbb" +
+                                "3749t0294t940gwrijsfvjbdn cln derbln coijeprogjv09wo4rsvofxblkrsgbb" +
+                                "3749t0294t940gwrijsfvjbdn cln derbln coijeprogjv09wo4rsvofxblkrsgbb"
+                )
+        );
     }
 
 

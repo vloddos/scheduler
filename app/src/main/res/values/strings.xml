@@ -7,4 +7,7 @@
     <string name="lt">&lt;</string>
     <string name="gt">&gt;</string>
     <string name="plus">+</string>
+    <string name="name">Name</string>
+    <string name="save">save</string>
+    <string name="description">Description</string>
 </resources>

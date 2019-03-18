@@ -70,13 +70,13 @@ public class MainActivity extends AppCompatActivity {
         onPageChangeListener.onPageSelected(viewPager.getCurrentItem());
     }
 
-    public void eventListActivity(TextView textView) {
+    public void eventListActivity(View view) {
         switch (viewPager.getCurrentItem()) {
             case 1:
                 break;
             case 2:
                 Intent intent = new Intent(this, EventListActivity.class);
-                intent.putExtra("eventList", dayFragment.getEvents(textView));
+                intent.putExtra("eventList", dayFragment.getEvents((TextView) view));
                 startActivity(intent);
                 break;
         }

@@ -5,7 +5,9 @@ import com.example.android.scheduler.global.CalendarInterval;
 import java.io.Serializable;
 
 public class Event implements Serializable {
-    // TODO: 18.03.2019 serialver 
+
+    private static final long serialVersionUID = -8023521667978959263L;
+
     private int id;
 
     public String name;

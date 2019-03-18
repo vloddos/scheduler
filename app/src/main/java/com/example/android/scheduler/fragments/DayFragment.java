@@ -25,6 +25,7 @@ import com.example.android.scheduler.models.Event;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
@@ -36,6 +37,7 @@ public class DayFragment extends Fragment implements Selectable, EventSettable {
 
     private static final SparseArray<String> daysOfWeek = new SparseArray<>();
 
+    // TODO: 18.03.2019 use locale
     static {
         daysOfWeek.put(Calendar.MONDAY, "пн");
         daysOfWeek.put(Calendar.TUESDAY, "вт");
@@ -57,6 +59,8 @@ public class DayFragment extends Fragment implements Selectable, EventSettable {
     public Button rightButton;
 
     public DayFragment() {
+        for (int i = 0; i < hourEventLists.length; ++i)
+            hourEventLists[i] = new ArrayList<>();
     }
 
     @Override
@@ -119,9 +123,9 @@ public class DayFragment extends Fragment implements Selectable, EventSettable {
 
             from.set(Calendar.HOUR_OF_DAY, i);
             to.set(Calendar.HOUR_OF_DAY, i);
-
-            hourEventLists[i] = new ArrayList<>();
             CalendarInterval interval = new CalendarInterval(from, to);
+
+            hourEventLists[i].clear();
 
             for (Event e : dayEventList)
                 if (interval.isIntersect(e.interval))

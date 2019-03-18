@@ -1,8 +1,11 @@
 package com.example.android.scheduler.global;
 
+import java.io.Serializable;
 import java.util.Calendar;
 
-public class CalendarInterval {
+public class CalendarInterval implements Serializable {
+
+    private static final long serialVersionUID = -6987360434922826720L;
 
     private static boolean le(Calendar a, Calendar b) {
         return a.before(b) || a.equals(b);
