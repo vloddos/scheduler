@@ -51,11 +51,6 @@ public class ExampleUnitTest {
     }
 
     @Test
-    public void text_view(){
-        System.out.println(TextView.class instanceof Serializable);
-    }
-
-    @Test
     public void substring() {
         System.out.println("1234abc".substring(0, 5));
     }
