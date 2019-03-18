@@ -7,8 +7,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.android.scheduler.R;
 import com.example.android.scheduler.fragments.DayFragment;
@@ -19,7 +17,7 @@ import com.example.android.scheduler.fragments.Selectable;
 import com.example.android.scheduler.fragments.WeekFragment;
 import com.example.android.scheduler.global.Global;
 
-import java.util.ArrayList;
+import java.text.ParseException;
 
 // TODO: 18.03.2019 activities connection
 // TODO: 18.03.2019 remake week/day view
@@ -33,7 +31,6 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onPageScrolled(int i, float v, int i1) {
-
         }
 
         @Override
@@ -46,7 +43,6 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onPageScrollStateChanged(int i) {
-
         }
     };
 
@@ -73,13 +69,14 @@ public class MainActivity extends AppCompatActivity {
         onPageChangeListener.onPageSelected(viewPager.getCurrentItem());
     }
 
-    public void eventListActivity(View view) {
+    public void eventListActivity(View view) throws ParseException {
         switch (viewPager.getCurrentItem()) {
             case 1:
                 break;
             case 2:
                 Intent intent = new Intent(this, EventListActivity.class);
-                intent.putExtra("eventList", dayFragment.getEvents((TextView) view));
+                intent.putExtra("calendar",dayFragment.getCalendar(view));
+                intent.putExtra("eventList", dayFragment.getEvents(view));
                 startActivity(intent);
                 break;
         }

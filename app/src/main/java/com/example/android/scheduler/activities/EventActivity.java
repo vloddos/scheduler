@@ -19,7 +19,7 @@ import com.example.android.scheduler.models.Event;
 import java.text.ParseException;
 import java.util.Calendar;
 
-// TODO: 18.03.2019 add date/time view
+// TODO: 18.03.2019 fix description view size
 public class EventActivity extends AppCompatActivity {
 
     /**

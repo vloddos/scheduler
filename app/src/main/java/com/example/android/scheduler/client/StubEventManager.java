@@ -32,33 +32,33 @@ public class StubEventManager implements EventService {
         Calendar from = Calendar.getInstance();
         Calendar to = Calendar.getInstance();
 
-        from.setTime(Constants.fullDateFormat.parse("2019-03-17 15:35:00"));
-        to.setTime(Constants.fullDateFormat.parse("2019-03-17 15:45:00"));
+        from.setTime(Constants.fullDateFormat.parse("2019-03-17 15:35"));
+        to.setTime(Constants.fullDateFormat.parse("2019-03-17 15:45"));
         eventList.add(
                 new Event(
-                        0,
+                        1337,
                         "testevent",
                         new CalendarInterval(from, to),
                         "97wgfe99731fgg382ewfojscndjbsfvjkxcvxc"
                 )
         );
 
-        from.setTime(Constants.fullDateFormat.parse("2019-03-17 15:00:00"));
-        to.setTime(Constants.fullDateFormat.parse("2019-03-17 15:10:00"));
+        from.setTime(Constants.fullDateFormat.parse("2019-03-17 15:00"));
+        to.setTime(Constants.fullDateFormat.parse("2019-03-17 15:10"));
         eventList.add(
                 new Event(
-                        0,
+                        228,
                         "second event",
                         new CalendarInterval(from, to),
                         "3749t0294t940gwrijsfvjbdn cln derbln coijeprogjv09wo4rsvofxblkrsgbb"
                 )
         );
 
-        from.setTime(Constants.fullDateFormat.parse("2019-03-17 15:02:28"));
-        to.setTime(Constants.fullDateFormat.parse("2019-03-17 15:13:37"));
+        from.setTime(Constants.fullDateFormat.parse("2019-03-17 15:02"));
+        to.setTime(Constants.fullDateFormat.parse("2019-03-17 15:13"));
         eventList.add(
                 new Event(
-                        0,
+                        1488,
                         "event with long name",
                         new CalendarInterval(from, to),
                         "3749t0294t940gwrijsfvjbdn cln derbln coijeprogjv09wo4rsvofxblkrsgbb" +

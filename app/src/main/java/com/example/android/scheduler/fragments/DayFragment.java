@@ -136,7 +136,7 @@ public class DayFragment extends Fragment implements Selectable, EventSettable {
                     ";",
                     hourEventLists[i].stream()
                             .map(e -> e.name)
-                            .collect(Collectors.toCollection(ArrayList::new))
+                            .collect(Collectors.toList())
             );
 
             if (text.length() > 50)
@@ -163,7 +163,14 @@ public class DayFragment extends Fragment implements Selectable, EventSettable {
         setEvents();
     }
 
-    public ArrayList<Event> getEvents(TextView textView) {
-        return hourEventLists[hours.indexOfChild(textView)];
+    public Calendar getCalendar(View view) throws ParseException {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(Constants.shortDateFormat.parse(date.getText().toString()));
+        calendar.set(Calendar.HOUR_OF_DAY, hours.indexOfChild(view));
+        return calendar;
+    }
+
+    public ArrayList<Event> getEvents(View view) {
+        return hourEventLists[hours.indexOfChild(view)];
     }
 }

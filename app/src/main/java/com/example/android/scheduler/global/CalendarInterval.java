@@ -3,6 +3,7 @@ package com.example.android.scheduler.global;
 import java.io.Serializable;
 import java.util.Calendar;
 
+// TODO: 18.03.2019 make to exclusive???
 public class CalendarInterval implements Serializable, Cloneable {
 
     private static final long serialVersionUID = -6987360434922826720L;
