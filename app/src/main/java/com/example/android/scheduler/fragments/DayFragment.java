@@ -105,18 +105,19 @@ public class DayFragment extends Fragment implements Selectable, EventSettable {
     public void setEvents() {//must call after select
         Calendar from = Calendar.getInstance();
         Calendar to;
+        List<Event> dayEventList;
 
         try {
             from.setTime(Constants.shortDateFormat.parse(date.getText().toString()));
             to = (Calendar) from.clone();
             to.add(Calendar.DAY_OF_YEAR, 1);
             to.add(Calendar.SECOND, -1);//dd.MM.YYYY 23:59:59
-        } catch (ParseException e) {
+
+            dayEventList = StubEventManager.getInstance().get(new CalendarInterval(from, to));
+        } catch (Exception e) {
             e.printStackTrace();
             return;
         }
-
-        List<Event> dayEventList = StubEventManager.getInstance().get(new CalendarInterval(from, to));
 
         for (int i = 0; i < hours.getChildCount(); ++i) {
             TextView h = (TextView) hours.getChildAt(i);
@@ -129,7 +130,7 @@ public class DayFragment extends Fragment implements Selectable, EventSettable {
 
             for (Event e : dayEventList)
                 if (interval.isIntersect(e.interval))
-                    hourEventLists[i].add(e);
+                    hourEventLists[i].add(e);// FIXME: 18.03.2019 clone???????????
 
             String text = String.join(
                     ";",

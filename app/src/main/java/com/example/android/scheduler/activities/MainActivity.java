@@ -21,7 +21,9 @@ import com.example.android.scheduler.global.Global;
 
 import java.util.ArrayList;
 
+// TODO: 18.03.2019 activities connection
 // TODO: 18.03.2019 remake week/day view
+// FIXME: 18.03.2019 Calendar.MONTH 0/1?
 public class MainActivity extends AppCompatActivity {
 
     public static final String LOG_TAG = MainActivity.class.getSimpleName();

@@ -11,6 +11,8 @@ import android.widget.TextView;
 import com.example.android.scheduler.DatePickerFragment;
 import com.example.android.scheduler.R;
 import com.example.android.scheduler.TimePickerFragment;
+import com.example.android.scheduler.client.StubEventManager;
+import com.example.android.scheduler.global.CalendarInterval;
 import com.example.android.scheduler.global.Constants;
 import com.example.android.scheduler.models.Event;
 
@@ -19,6 +21,15 @@ import java.util.Calendar;
 
 // TODO: 18.03.2019 add date/time view
 public class EventActivity extends AppCompatActivity {
+
+    /**
+     * must use only for {@link EventActivity#save(View)}
+     * to define which method of {@link com.example.android.scheduler.client.EventService}
+     * should call
+     */
+    private boolean add;
+
+    private Event event;
 
     private TextView eventId;
     private EditText eventName;
@@ -42,7 +53,8 @@ public class EventActivity extends AppCompatActivity {
         eventDescription = findViewById(R.id.event_description);
 
         Intent intent = getIntent();
-        Event event = (Event) intent.getSerializableExtra("event");
+        add = intent.getBooleanExtra("add", false);
+        event = (Event) intent.getSerializableExtra("event");
 
         eventId.setText("" + event.getId());
         eventName.setText(event.name);
@@ -64,24 +76,47 @@ public class EventActivity extends AppCompatActivity {
     }
 
     public void showTimePickerDialog(View v) throws ParseException {
-        TextView textView = (TextView) v;
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(Constants.timeFormat.parse(textView.getText().toString()));
-
-        DialogFragment newFragment = TimePickerFragment.newInstance(
-                v.getId(),
-                calendar.get(Calendar.HOUR_OF_DAY),
-                calendar.get(Calendar.MINUTE)
-        );
+        DialogFragment newFragment = TimePickerFragment.newInstance((TextView) v);
         newFragment.show(getSupportFragmentManager(), "timePicker");
     }
 
     public void showDatePickerDialog(View v) {
-        DialogFragment newFragment = new DatePickerFragment();
+        DialogFragment newFragment = DatePickerFragment.newInstance((TextView) v);
         newFragment.show(getSupportFragmentManager(), "datePicker");
     }
 
     public void save(View view) {
+        event.name = eventName.getText().toString();
 
+        Calendar from = Calendar.getInstance();
+        Calendar to = Calendar.getInstance();
+        try {
+            from.setTime(
+                    Constants.dateTimeFormat.parse(
+                            startDate.getText().toString() +
+                                    " " +
+                                    startTime.getText().toString()
+                    )
+            );
+
+            to.setTime(
+                    Constants.dateTimeFormat.parse(
+                            endDate.getText().toString() +
+                                    " " +
+                                    endTime.getText().toString()
+                    )
+            );
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        event.interval = new CalendarInterval(from, to);
+
+        event.description = eventDescription.getText().toString();
+
+        if (add) {
+            StubEventManager.getInstance().add(event);
+        } else {
+            StubEventManager.getInstance().update(event);
+        }
     }
 }

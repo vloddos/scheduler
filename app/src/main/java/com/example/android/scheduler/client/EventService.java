@@ -3,15 +3,15 @@ package com.example.android.scheduler.client;
 import com.example.android.scheduler.global.CalendarInterval;
 import com.example.android.scheduler.models.Event;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public interface EventService {
 
-    void add(Event event);
+    void add(Event event) throws Exception;
 
-    ArrayList<Event> get(CalendarInterval interval);
+    List<Event> get(CalendarInterval interval) throws Exception;
 
-    void update(Event event);
+    void update(Event event) throws Exception;
 
-    void delete(int id);
+    void delete(int id) throws Exception;
 }

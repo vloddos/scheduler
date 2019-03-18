@@ -3,7 +3,7 @@ package com.example.android.scheduler.global;
 import java.io.Serializable;
 import java.util.Calendar;
 
-public class CalendarInterval implements Serializable {
+public class CalendarInterval implements Serializable, Cloneable {
 
     private static final long serialVersionUID = -6987360434922826720L;
 
@@ -33,5 +33,11 @@ public class CalendarInterval implements Serializable {
 
     public Calendar getTo() {
         return (Calendar) to.clone();
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        super.clone();
+        return new CalendarInterval(from, to);
     }
 }

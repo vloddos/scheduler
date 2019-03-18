@@ -76,11 +76,17 @@ public class StubEventManager implements EventService {
     }
 
     @Override
-    public ArrayList<Event> get(CalendarInterval interval) {
+    public List<Event> get(CalendarInterval interval) throws Exception {// FIXME: 18.03.2019 remove clone?
+        /*List<Event> el = new ArrayList<>();
+        for (Event e : eventList)
+            if (e.interval.isIntersect(interval))
+                el.add((Event) e.clone());
+
+        return el;*/
         return
                 eventList.stream()
                         .filter(e -> e.interval.isIntersect(interval))
-                        .collect(Collectors.toCollection(ArrayList::new));
+                        .collect(Collectors.toList());
     }
 
     @Override

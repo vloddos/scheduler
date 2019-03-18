@@ -12,6 +12,7 @@ import com.example.android.scheduler.models.Event;
 
 import java.util.ArrayList;
 
+// TODO: 18.03.2019 add datetime info there or in Event class
 public class EventListActivity extends AppCompatActivity {
 
     private ListView eventListView;
@@ -28,7 +29,13 @@ public class EventListActivity extends AppCompatActivity {
         eventListView.setOnItemClickListener(
                 (parent, view, position, id) -> {
                     Intent intent1 = new Intent(this, EventActivity.class);
-                    intent1.putExtra("event", eventList.get(position));
+                    //intent1.putExtra("add", false);
+                    try {
+                        intent1.putExtra("event", (Event) eventList.get(position).clone());
+                    } catch (CloneNotSupportedException e) {
+                        e.printStackTrace();
+                        return;
+                    }
                     startActivity(intent1);
                 }
         );
@@ -40,6 +47,9 @@ public class EventListActivity extends AppCompatActivity {
     }
 
     public void add(View view) {
-
+        Intent intent1 = new Intent(this, EventActivity.class);
+        intent1.putExtra("add", true);
+        intent1.putExtra("event", new Event());//new Event("new event", new Event(), "description")
+        startActivity(intent1);
     }
 }
