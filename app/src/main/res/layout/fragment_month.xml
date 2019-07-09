@@ -1,12 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:gravity="center">
+    android:gravity="center"
+    android:orientation="vertical">
 
-    <CalendarView xmlns:android="http://schemas.android.com/apk/res/android"
+    <!--<CalendarView xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/calendar_view"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content" />-->
+
+    <com.applandeo.materialcalendarview.CalendarView
+        android:id="@+id/calendar_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:eventsEnabled="true"
+        app:selectionColor="#0000FF"
+        app:type="one_day_picker" />
 
 </LinearLayout>

@@ -54,4 +54,23 @@ public class ExampleUnitTest {
     public void substring() {
         System.out.println("1234abc".substring(0, 5));
     }
+
+    @Test
+    public void addHourOfDay() throws ParseException {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(Constants.fullDateFormat.parse("2019-07-09 23:00"));
+        System.out.println(Constants.fullDateFormat.format(calendar.getTime()));
+        //calendar.add(Calendar.HOUR_OF_DAY, 1);
+        calendar.set(Calendar.HOUR_OF_DAY, 24);
+        System.out.println(Constants.fullDateFormat.format(calendar.getTime()));
+    }
+
+    @Test
+    public void addDayOfMonth() throws ParseException {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(Constants.shortDateFormat.parse("31.07.2019"));
+        System.out.println(Constants.fullDateFormat.format(calendar.getTime()));
+        calendar.add(Calendar.DAY_OF_YEAR, 1);
+        System.out.println(Constants.fullDateFormat.format(calendar.getTime()));
+    }
 }

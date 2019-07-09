@@ -32,8 +32,10 @@ public class StubEventManager implements EventService {
         Calendar from = Calendar.getInstance();
         Calendar to = Calendar.getInstance();
 
-        from.setTime(Constants.fullDateFormat.parse("2019-03-17 15:35"));
-        to.setTime(Constants.fullDateFormat.parse("2019-03-17 15:45"));
+        from.set(Calendar.HOUR_OF_DAY, 15);
+        from.set(Calendar.MINUTE, 35);
+        to.set(Calendar.HOUR_OF_DAY, 15);
+        to.set(Calendar.MINUTE, 45);
         eventList.add(
                 new Event(
                         1337,
@@ -43,8 +45,10 @@ public class StubEventManager implements EventService {
                 )
         );
 
-        from.setTime(Constants.fullDateFormat.parse("2019-03-17 15:00"));
-        to.setTime(Constants.fullDateFormat.parse("2019-03-17 15:10"));
+        from.set(Calendar.HOUR_OF_DAY, 15);
+        from.set(Calendar.MINUTE, 0);
+        to.set(Calendar.HOUR_OF_DAY, 15);
+        to.set(Calendar.MINUTE, 10);
         eventList.add(
                 new Event(
                         228,
@@ -54,8 +58,10 @@ public class StubEventManager implements EventService {
                 )
         );
 
-        from.setTime(Constants.fullDateFormat.parse("2019-03-17 15:02"));
-        to.setTime(Constants.fullDateFormat.parse("2019-03-17 15:13"));
+        from.set(Calendar.HOUR_OF_DAY, 15);
+        from.set(Calendar.MINUTE, 2);
+        to.set(Calendar.HOUR_OF_DAY, 15);
+        to.set(Calendar.MINUTE, 13);
         eventList.add(
                 new Event(
                         1488,

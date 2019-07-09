@@ -65,7 +65,8 @@ public class EventListActivity extends AppCompatActivity {
         Calendar from = Calendar.getInstance();
         from.setTime(Constants.eventListDateTimeFormat.parse(eventListDateTime.getText().toString()));
         Calendar to = (Calendar) from.clone();
-        to.set(Calendar.MINUTE, 59);
+        //to.set(Calendar.MINUTE, 59);
+        to.add(Calendar.HOUR_OF_DAY, 1);
 
         intent1.putExtra(
                 "event",

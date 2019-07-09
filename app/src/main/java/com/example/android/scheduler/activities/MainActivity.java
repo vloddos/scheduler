@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static final String LOG_TAG = MainActivity.class.getSimpleName();
 
+    private TabLayout tabLayout;
     private ViewPager viewPager;
     private ViewPager.OnPageChangeListener onPageChangeListener = new ViewPager.OnPageChangeListener() {
 
@@ -52,7 +53,6 @@ public class MainActivity extends AppCompatActivity {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //ApplicationStarter.initialize(this, true);
 
         setContentView(R.layout.activity_main);
 
@@ -60,9 +60,16 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setAdapter(new MainFragmentPagerAdapter(getSupportFragmentManager(), this));
         viewPager.addOnPageChangeListener(onPageChangeListener);
 
-        TabLayout tabLayout = findViewById(R.id.tablayout);
+        tabLayout = findViewById(R.id.tablayout);
         tabLayout.setupWithViewPager(viewPager);
     }
+
+    /*@Override
+    protected void onStart() {
+        super.onStart();
+
+        onPageChangeListener.onPageSelected(viewPager.getCurrentItem());
+    }*/
 
     public void today(View view) {
         Global.selectedCalendar = null;
@@ -75,10 +82,20 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case 2:
                 Intent intent = new Intent(this, EventListActivity.class);
-                intent.putExtra("calendar",dayFragment.getCalendar(view));
+                intent.putExtra("calendar", dayFragment.getCalendar(view));
                 intent.putExtra("eventList", dayFragment.getEvents(view));
                 startActivity(intent);
                 break;
         }
+    }
+
+    //возможно понадобится в будущем
+    public void sync(View view) {
+        (
+                (EventSettable) new Fragment[]{
+                        this.monthFragment, this.weekFragment, this.dayFragment
+                }[viewPager.getCurrentItem()]
+        ).setEvents();
+//        onPageChangeListener.onPageSelected(viewPager.getCurrentItem());
     }
 }

@@ -3,7 +3,6 @@ package com.example.android.scheduler.global;
 import java.io.Serializable;
 import java.util.Calendar;
 
-// TODO: 18.03.2019 make to exclusive???
 public class CalendarInterval implements Serializable, Cloneable {
 
     private static final long serialVersionUID = -6987360434922826720L;
@@ -13,7 +12,7 @@ public class CalendarInterval implements Serializable, Cloneable {
     }
 
     private Calendar from;//inclusive
-    private Calendar to;//inclusive
+    private Calendar to;//exclusive
 
     public CalendarInterval(Calendar from, Calendar to) throws IllegalStateException {
         if (from.after(to))
@@ -24,8 +23,10 @@ public class CalendarInterval implements Serializable, Cloneable {
     }
 
     public boolean isIntersect(CalendarInterval other) {
-        return le(from, other.from) && le(other.from, to) || le(from, other.to) && le(other.to, to) ||
-                le(other.from, from) && le(from, other.to) || le(other.from, to) && le(to, other.to);
+        /*return le(from, other.from) && le(other.from, to) || le(from, other.to) && le(other.to, to) ||
+                le(other.from, from) && le(from, other.to) || le(other.from, to) && le(to, other.to);*/
+        return le(from, other.from) && other.from.before(to) || from.before(other.to) && le(other.to, to) ||
+                le(other.from, from) && from.before(other.to) || other.from.before(to) && le(to, other.to);
     }
 
     public Calendar getFrom() {

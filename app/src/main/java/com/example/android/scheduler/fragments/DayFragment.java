@@ -111,7 +111,7 @@ public class DayFragment extends Fragment implements Selectable, EventSettable {
             from.setTime(Constants.shortDateFormat.parse(date.getText().toString()));
             to = (Calendar) from.clone();
             to.add(Calendar.DAY_OF_YEAR, 1);
-            to.add(Calendar.SECOND, -1);//dd.MM.YYYY 23:59:59
+            //to.add(Calendar.SECOND, -1);//dd.MM.YYYY 23:59:59
 
             dayEventList = StubEventManager.getInstance().get(new CalendarInterval(from, to));
         } catch (Exception e) {
@@ -119,11 +119,13 @@ public class DayFragment extends Fragment implements Selectable, EventSettable {
             return;
         }
 
+        to.add(Calendar.DAY_OF_YEAR, -1);
         for (int i = 0; i < hours.getChildCount(); ++i) {
             TextView h = (TextView) hours.getChildAt(i);
 
             from.set(Calendar.HOUR_OF_DAY, i);
-            to.set(Calendar.HOUR_OF_DAY, i);
+            //to.set(Calendar.HOUR_OF_DAY, i);
+            to.set(Calendar.HOUR_OF_DAY, i + 1);
             CalendarInterval interval = new CalendarInterval(from, to);
 
             hourEventLists[i].clear();
@@ -132,12 +134,15 @@ public class DayFragment extends Fragment implements Selectable, EventSettable {
                 if (interval.isIntersect(e.interval))
                     hourEventLists[i].add(e);// FIXME: 18.03.2019 clone???????????
 
-            String text = String.join(
+            /*String text = String.join(
                     ";",
                     hourEventLists[i].stream()
                             .map(e -> e.name)
                             .collect(Collectors.toList())
-            );
+            );*/
+            String text = hourEventLists[i].stream()
+                    .map(e -> e.name)
+                    .collect(Collectors.joining(";"));
 
             if (text.length() > 50)
                 text = text.substring(0, 47) + "...";
@@ -157,7 +162,7 @@ public class DayFragment extends Fragment implements Selectable, EventSettable {
         if (Global.selectedCalendar == null)
             Global.selectedCalendar = Calendar.getInstance();
 
-        Global.selectedCalendar.add(Calendar.DAY_OF_MONTH, view.getId() == leftButton.getId() ? -1 : 1);
+        Global.selectedCalendar.add(Calendar.DAY_OF_MONTH, view.getId() == leftButton.getId() ? -1 : 1);//Calendar.DAY_OF_YEAR???
 
         select();
         setEvents();
