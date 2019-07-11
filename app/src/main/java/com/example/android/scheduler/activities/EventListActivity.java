@@ -59,8 +59,8 @@ public class EventListActivity extends AppCompatActivity {
     }
 
     public void add(View view) throws ParseException {
-        Intent intent1 = new Intent(this, EventActivity.class);
-        intent1.putExtra("add", true);
+        Intent intent = new Intent(this, EventActivity.class);
+        intent.putExtra("add", true);
 
         Calendar from = Calendar.getInstance();
         from.setTime(Constants.eventListDateTimeFormat.parse(eventListDateTime.getText().toString()));
@@ -68,7 +68,7 @@ public class EventListActivity extends AppCompatActivity {
         //to.set(Calendar.MINUTE, 59);
         to.add(Calendar.HOUR_OF_DAY, 1);
 
-        intent1.putExtra(
+        intent.putExtra(
                 "event",
                 new Event(
                         new Random().nextInt(),
@@ -77,6 +77,6 @@ public class EventListActivity extends AppCompatActivity {
                         "description"
                 )
         );
-        startActivity(intent1);
+        startActivity(intent);
     }
 }

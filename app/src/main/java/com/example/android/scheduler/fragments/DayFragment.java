@@ -25,13 +25,12 @@ import com.example.android.scheduler.models.Event;
 
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class DayFragment extends Fragment implements Selectable, EventSettable {
+public class DayFragment extends Fragment implements Selectable, EventManageable {
 
     public static final String title = "day";
 
@@ -100,10 +99,12 @@ public class DayFragment extends Fragment implements Selectable, EventSettable {
         date.setText(Constants.shortDateFormat.format(calendar.getTime()));
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
+    private List<Event> dayEventList;
+
+    //@RequiresApi(api = Build.VERSION_CODES.O)
     @Override
-    public void setEvents() {//must call after select
-        Calendar from = Calendar.getInstance();
+    public void setEvents(List<Event> eventList) {//must call after select
+        /*Calendar from = Calendar.getInstance();
         Calendar to;
         List<Event> dayEventList;
 
@@ -119,7 +120,11 @@ public class DayFragment extends Fragment implements Selectable, EventSettable {
             return;
         }
 
-        to.add(Calendar.DAY_OF_YEAR, -1);
+        to.add(Calendar.DAY_OF_YEAR, -1);*/
+        dayEventList = eventList;
+        CalendarInterval calendarInterval = getVisibleInterval();
+        Calendar from = calendarInterval.getFrom(), to = (Calendar) from.clone();
+
         for (int i = 0; i < hours.getChildCount(); ++i) {
             TextView h = (TextView) hours.getChildAt(i);
 
@@ -157,7 +162,53 @@ public class DayFragment extends Fragment implements Selectable, EventSettable {
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
+    //    @RequiresApi(api = Build.VERSION_CODES.O)
+    @Override
+    public void addEvent(Event event) {
+        dayEventList.add(event);
+        setEvents(dayEventList);
+    }
+
+    //    @RequiresApi(api = Build.VERSION_CODES.O)
+    @Override
+    public void removeEvent(int id) {
+        for (int i = 0; i < dayEventList.size(); ++i)
+            if (dayEventList.get(i).getId() == id) {
+                dayEventList.remove(i);
+                break;
+            }
+        setEvents(dayEventList);
+    }
+
+    //    @RequiresApi(api = Build.VERSION_CODES.O)
+    @Override
+    public void updateEvent(Event event) {
+        if (event.interval.isIntersect(getVisibleInterval())) {
+            for (int i = 0; i < dayEventList.size(); ++i)
+                if (dayEventList.get(i).getId() == event.getId()) {
+                    dayEventList.set(i, event);
+                    break;
+                }
+            setEvents(dayEventList);//????????
+        } else
+            removeEvent(event.getId());
+    }
+
+    @Override
+    public CalendarInterval getVisibleInterval() {
+        Calendar from = Calendar.getInstance();
+        try {
+            from.setTime(Constants.shortDateFormat.parse(date.getText().toString()));
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return null;
+        }
+        Calendar to = (Calendar) from.clone();
+        to.add(Calendar.DAY_OF_YEAR, 1);
+        return new CalendarInterval(from, to);
+    }
+
+    //    @RequiresApi(api = Build.VERSION_CODES.O)
     public void change(View view) {
         if (Global.selectedCalendar == null)
             Global.selectedCalendar = Calendar.getInstance();
@@ -165,7 +216,7 @@ public class DayFragment extends Fragment implements Selectable, EventSettable {
         Global.selectedCalendar.add(Calendar.DAY_OF_MONTH, view.getId() == leftButton.getId() ? -1 : 1);//Calendar.DAY_OF_YEAR???
 
         select();
-        setEvents();
+        setEvents(StubEventManager.getInstance().get(getVisibleInterval()));
     }
 
     public Calendar getCalendar(View view) throws ParseException {

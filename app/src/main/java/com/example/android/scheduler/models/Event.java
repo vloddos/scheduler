@@ -3,6 +3,7 @@ package com.example.android.scheduler.models;
 import com.example.android.scheduler.global.CalendarInterval;
 
 import java.io.Serializable;
+import java.util.TimeZone;
 
 // TODO: 18.03.2019 remove seconds
 public class Event implements Serializable, Cloneable {
@@ -38,6 +39,15 @@ public class Event implements Serializable, Cloneable {
 
     public int getId() {
         return id;
+    }
+
+    public void setTimeZone(TimeZone timeZone) {
+        interval.setFromTimeZone(timeZone);
+        interval.setToTimeZone(timeZone);
+    }
+
+    public TimeZone getTimeZone() {
+        return interval.getFromTimeZone();
     }
 
     @Override

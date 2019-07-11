@@ -7,9 +7,12 @@ import com.example.android.scheduler.global.Constants;
 import org.junit.Test;
 
 import java.io.Serializable;
+import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.TimeZone;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -72,5 +75,31 @@ public class ExampleUnitTest {
         System.out.println(Constants.fullDateFormat.format(calendar.getTime()));
         calendar.add(Calendar.DAY_OF_YEAR, 1);
         System.out.println(Constants.fullDateFormat.format(calendar.getTime()));
+    }
+
+    @Test
+    public void timezone() {
+        for (String tz : TimeZone.getAvailableIDs())
+            System.out.println(tz);
+    }
+
+    @Test
+    public void calendarsWithDifferentTimeZones() {
+        Calendar a = Calendar.getInstance();
+        Calendar b = (Calendar) a.clone();
+
+        System.out.println(a.getTimeZone().getID());
+        System.out.println(b.getTimeZone().getID());
+        System.out.println(a.before(b));
+        System.out.println(a.getTime().getTime());
+        System.out.println(b.getTime().getTime());
+
+        a.setTimeZone(TimeZone.getTimeZone("Europe/Moscow"));
+
+        System.out.println(a.getTimeZone().getID());
+        System.out.println(b.getTimeZone().getID());
+        System.out.println(a.before(b));
+        System.out.println(a.getTime().getTime());
+        System.out.println(b.getTime().getTime());
     }
 }

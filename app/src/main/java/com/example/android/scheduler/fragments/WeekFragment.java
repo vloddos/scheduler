@@ -11,12 +11,15 @@ import android.widget.TextView;
 
 import com.example.android.scheduler.R;
 import com.example.android.scheduler.activities.MainActivity;
+import com.example.android.scheduler.global.CalendarInterval;
 import com.example.android.scheduler.global.Constants;
 import com.example.android.scheduler.global.Global;
+import com.example.android.scheduler.models.Event;
 
 import java.util.Calendar;
+import java.util.List;
 
-public class WeekFragment extends Fragment implements Selectable,EventSettable {
+public class WeekFragment extends Fragment implements Selectable, EventManageable {
 
     private static final int[] daysOfWeek = new int[]{
             Calendar.MONDAY,
@@ -124,8 +127,28 @@ public class WeekFragment extends Fragment implements Selectable,EventSettable {
     }
 
     @Override
-    public void setEvents() {
+    public void setEvents(List<Event> eventList) {
 
+    }
+
+    @Override
+    public void addEvent(Event event) {
+
+    }
+
+    @Override
+    public void removeEvent(int id) {
+
+    }
+
+    @Override
+    public void updateEvent(Event event) {
+
+    }
+
+    @Override
+    public CalendarInterval getVisibleInterval() {
+        return new CalendarInterval(Calendar.getInstance(), Calendar.getInstance());//stub
     }
     // TODO: 13.03.2019 scroll view???
 }

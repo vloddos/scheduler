@@ -43,6 +43,7 @@
             android:layout_marginEnd="0dp"
             android:clickable="true"
             android:focusable="true"
+            android:onClick="addEvent"
             app:backgroundTint="#0000FF"
             app:elevation="0dp"
             app:pressedTranslationZ="3dp"

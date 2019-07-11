@@ -2,6 +2,7 @@ package com.example.android.scheduler.global;
 
 import java.io.Serializable;
 import java.util.Calendar;
+import java.util.TimeZone;
 
 public class CalendarInterval implements Serializable, Cloneable {
 
@@ -35,6 +36,22 @@ public class CalendarInterval implements Serializable, Cloneable {
 
     public Calendar getTo() {
         return (Calendar) to.clone();
+    }
+
+    public void setFromTimeZone(TimeZone timeZone) {
+        from.setTimeZone(timeZone);
+    }
+
+    public void setToTimeZone(TimeZone timeZone) {
+        to.setTimeZone(timeZone);
+    }
+
+    public TimeZone getFromTimeZone() {
+        return getFrom().getTimeZone();
+    }
+
+    public TimeZone getToTimeZone() {
+        return getTo().getTimeZone();
     }
 
     @Override

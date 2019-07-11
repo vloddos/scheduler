@@ -82,7 +82,7 @@ public class StubEventManager implements EventService {
     }
 
     @Override
-    public List<Event> get(CalendarInterval interval) throws Exception {// FIXME: 18.03.2019 remove clone?
+    public List<Event> get(CalendarInterval interval) {// FIXME: 18.03.2019 remove clone?
         /*List<Event> el = new ArrayList<>();
         for (Event e : eventList)
             if (e.interval.isIntersect(interval))
@@ -98,12 +98,18 @@ public class StubEventManager implements EventService {
     @Override
     public void update(Event event) {
         for (int i = 0; i < eventList.size(); ++i)
-            if (eventList.get(i).getId() == event.getId())
+            if (eventList.get(i).getId() == event.getId()) {
                 eventList.set(i, event);
+                break;
+            }
     }
 
     @Override
     public void delete(int id) {
-        eventList.removeIf(e -> e.getId() == id);
+        for (int i = 0; i < eventList.size(); ++i)
+            if (eventList.get(i).getId() == id) {
+                eventList.remove(i);
+                break;
+            }
     }
 }

@@ -5,5 +5,5 @@ import java.util.Calendar;
 
 public class Global {
 
-    public static Calendar selectedCalendar;
+    public static Calendar selectedCalendar;//todo refactor always !=null???
 }
