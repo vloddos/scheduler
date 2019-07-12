@@ -24,8 +24,6 @@ public class CalendarInterval implements Serializable, Cloneable {
     }
 
     public boolean isIntersect(CalendarInterval other) {
-        /*return le(from, other.from) && le(other.from, to) || le(from, other.to) && le(other.to, to) ||
-                le(other.from, from) && le(from, other.to) || le(other.from, to) && le(to, other.to);*/
         return le(from, other.from) && other.from.before(to) || from.before(other.to) && le(other.to, to) ||
                 le(other.from, from) && from.before(other.to) || other.from.before(to) && le(to, other.to);
     }

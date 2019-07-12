@@ -9,6 +9,13 @@ import org.junit.Test;
 import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.text.ParseException;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.temporal.ChronoField;
+import java.time.temporal.TemporalAccessor;
+import java.time.temporal.TemporalAmount;
+import java.time.temporal.TemporalField;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -84,22 +91,72 @@ public class ExampleUnitTest {
     }
 
     @Test
-    public void calendarsWithDifferentTimeZones() {
+    public void calendarsWithDifferentTimeZones1() throws ParseException {
+        Calendar a = Calendar.getInstance();
+        a.setTimeInMillis(1562851754317L);
+        Calendar b = (Calendar) a.clone();
+
+        System.out.println(a.getTimeZone().getID());
+        System.out.println(b.getTimeZone().getID());
+        System.out.println(Constants.fullDateFormat.format(a.getTime()));
+        System.out.println(Constants.fullDateFormat.format(b.getTime()));
+        System.out.println(a.before(b));
+
+//        a.setTimeZone(TimeZone.getTimeZone("Europe/Moscow"));
+        Constants.fullDateFormat.setTimeZone(TimeZone.getTimeZone("Europe/Moscow"));
+        /*a.setTime(Constants.fullDateFormat.parse(Constants.fullDateFormat.format(a.getTime())));
+        Constants.fullDateFormat.setTimeZone(TimeZone.getDefault());*/
+
+        System.out.println(a.getTimeZone().getID());
+        System.out.println(b.getTimeZone().getID());
+        System.out.println(Constants.fullDateFormat.format(a.getTime()));
+        System.out.println(Constants.fullDateFormat.format(b.getTime()));
+        System.out.println(a.before(b));
+    }
+
+    @Test
+    public void calendarsWithDifferentTimeZones2() {
+        Calendar a = Calendar.getInstance(), b = (Calendar) a.clone(), c = (Calendar) a.clone();
+        b.setTimeZone(TimeZone.getTimeZone("Europe/Moscow"));
+        c.set(Calendar.HOUR_OF_DAY, 16);
+        System.out.println(a.get(Calendar.HOUR_OF_DAY));
+        System.out.println(b.get(Calendar.HOUR_OF_DAY));
+        //System.out.println(a.equals(b));
+        //System.out.println(c.before(b));
+
+    }
+
+    @Test
+    public void instantsWithDifferentTimeZones() {
+        Calendar a = Calendar.getInstance(), b = (Calendar) a.clone(), c = (Calendar) a.clone();
+        System.out.println(a.toInstant().atZone(ZoneId.systemDefault()));
+        System.out.println(b.toInstant().atZone(ZoneId.systemDefault()));
+        a.setTimeZone(TimeZone.getTimeZone("Europe/Moscow"));
+        System.out.println(a.toInstant().atZone(ZoneId.of(a.getTimeZone().getID())));
+        System.out.println(b.toInstant().atZone(ZoneId.systemDefault()));
+    }
+
+    @Test
+    public void geolocation() throws ParseException {
+//        System.out.println(Constants.fullDateFormat.getTimeZone().getID());
+
         Calendar a = Calendar.getInstance();
         Calendar b = (Calendar) a.clone();
 
         System.out.println(a.getTimeZone().getID());
         System.out.println(b.getTimeZone().getID());
+        System.out.println(Constants.fullDateFormat.format(a.getTime()));
+        System.out.println(Constants.fullDateFormat.format(b.getTime()));
         System.out.println(a.before(b));
-        System.out.println(a.getTime().getTime());
-        System.out.println(b.getTime().getTime());
 
-        a.setTimeZone(TimeZone.getTimeZone("Europe/Moscow"));
+        Constants.fullDateFormat.setTimeZone(a.getTimeZone());
+        a.setTime(Constants.fullDateFormat.parse(Constants.fullDateFormat.format(a.getTime())));
+        Constants.fullDateFormat.setTimeZone(TimeZone.getDefault());
 
         System.out.println(a.getTimeZone().getID());
         System.out.println(b.getTimeZone().getID());
+        System.out.println(Constants.fullDateFormat.format(a.getTime()));
+        System.out.println(Constants.fullDateFormat.format(b.getTime()));
         System.out.println(a.before(b));
-        System.out.println(a.getTime().getTime());
-        System.out.println(b.getTime().getTime());
     }
 }

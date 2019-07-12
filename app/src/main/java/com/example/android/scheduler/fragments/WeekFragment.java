@@ -114,8 +114,7 @@ public class WeekFragment extends Fragment implements Selectable, EventManageabl
 
     @Override
     public void select() {
-        Calendar calendar = Global.selectedCalendar;
-        calendar = calendar == null ? Calendar.getInstance() : (Calendar) calendar.clone();
+        Calendar calendar = (Calendar) Global.selectedCalendar.clone();
 
         for (int i = 0; i < weekDays.length; ++i) {
             calendar.set(Calendar.DAY_OF_WEEK, daysOfWeek[i]);
@@ -148,7 +147,8 @@ public class WeekFragment extends Fragment implements Selectable, EventManageabl
 
     @Override
     public CalendarInterval getVisibleInterval() {
-        return new CalendarInterval(Calendar.getInstance(), Calendar.getInstance());//stub
+        Calendar from = Calendar.getInstance();
+        return new CalendarInterval(from, (Calendar) from.clone());//stub
     }
     // TODO: 13.03.2019 scroll view???
 }

@@ -1,12 +1,12 @@
 package com.example.android.scheduler.activities;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -21,15 +21,12 @@ import com.example.android.scheduler.global.CalendarInterval;
 import com.example.android.scheduler.global.Constants;
 import com.example.android.scheduler.models.Event;
 
-import java.lang.reflect.Array;
 import java.text.ParseException;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.TimeZone;
-import java.util.stream.IntStream;
 
 // TODO: 18.03.2019 fix description view size
-public class EventActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class EventActivity extends AppCompatActivity {
 
     public static final String LOG_TAG = EventActivity.class.getSimpleName();
     /**
@@ -100,10 +97,9 @@ public class EventActivity extends AppCompatActivity implements AdapterView.OnIt
                         timeZones
                 )
         );
-        spinner.setOnItemSelectedListener(this);
         for (int i = 0; i < timeZones.length; ++i)
             if (timeZones[i].equals(id)) {
-                spinner.setSelection(i);//должно зависеть от текущего часового пояса?
+                spinner.setSelection(i);
                 break;
             }
     }
@@ -119,10 +115,9 @@ public class EventActivity extends AppCompatActivity implements AdapterView.OnIt
     }
 
     public void save(View view) {
-        event.name = eventName.getText().toString();
-
         Calendar from = Calendar.getInstance();
         Calendar to = Calendar.getInstance();
+        Constants.dateTimeFormat.setTimeZone(TimeZone.getTimeZone(spinner.getSelectedItem().toString()));
         try {
             from.setTime(
                     Constants.dateTimeFormat.parse(
@@ -139,12 +134,17 @@ public class EventActivity extends AppCompatActivity implements AdapterView.OnIt
                                     endTime.getText().toString()
                     )
             );
+            event.interval = new CalendarInterval(from, to);//убрать баг с неправильным интервалом
         } catch (ParseException e) {
             e.printStackTrace();
+        } catch (IllegalStateException e) {
+            new CalendarIntervalDialogFragment().show(getSupportFragmentManager(), "");
+            return;
+        } finally {
+            Constants.dateTimeFormat.setTimeZone(TimeZone.getDefault());
         }
-        event.interval = new CalendarInterval(from, to);//убрать баг с неправильным интервалом
-        event.setTimeZone(TimeZone.getTimeZone(spinner.getSelectedItem().toString()));
 
+        event.name = eventName.getText().toString();
         event.description = eventDescription.getText().toString();
 
         if (add) {
@@ -159,19 +159,24 @@ public class EventActivity extends AppCompatActivity implements AdapterView.OnIt
         finish();
     }
 
-
     public void remove(View view) {
         StubEventManager.getInstance().delete(event.getId());
+
+        Intent intent = new Intent();
+        intent.putExtra("id", event.getId());
+        setResult(RESULT_OK, intent);
+        finish();
     }
 
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        //event.setTimeZone(TimeZone.getTimeZone(((TextView) view).getText().toString()));
-        //Log.i(LOG_TAG, spinner.getSelectedItem().toString());
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-
+    public static class CalendarIntervalDialogFragment extends DialogFragment {
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder
+                    .setMessage("Invalid calendar interval\nstart datetime>end datetime")
+                    .setNeutralButton("ok", (dialog, id) -> {
+                    });
+            return builder.create();
+        }
     }
 }

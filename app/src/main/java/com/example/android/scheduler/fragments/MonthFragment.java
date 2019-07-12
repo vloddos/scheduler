@@ -7,7 +7,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.applandeo.materialcalendarview.CalendarView;
 import com.applandeo.materialcalendarview.EventDay;
@@ -17,14 +16,12 @@ import com.example.android.scheduler.R;
 import com.example.android.scheduler.activities.MainActivity;
 import com.example.android.scheduler.client.StubEventManager;
 import com.example.android.scheduler.global.CalendarInterval;
-import com.example.android.scheduler.global.Constants;
 import com.example.android.scheduler.global.Global;
 import com.example.android.scheduler.models.Event;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Optional;
 
 public class MonthFragment extends Fragment implements Selectable, EventManageable {
 
@@ -53,19 +50,7 @@ public class MonthFragment extends Fragment implements Selectable, EventManageab
         View v = inflater.inflate(R.layout.fragment_month, container, false);
 
         calendarView = v.findViewById(R.id.calendar_view);
-        /**default*/
-        /*calendarView.setOnDateChangeListener(
-                (view, year, month, dayOfMonth) -> {
-                    Global.selectedCalendar = Calendar.getInstance();
-                    Global.selectedCalendar.set(year, month, dayOfMonth);
-                    Toast.makeText(
-                            getActivity(),
-                            Constants.fullDateFormat.format(Global.selectedCalendar.getTime()),
-                            Toast.LENGTH_SHORT
-                    ).show();
-                }
-        );*/
-        /**applandeo*/
+
         OnCalendarPageChangeListener onCalendarPageChangeListener = () -> setEvents(StubEventManager.getInstance().get(getVisibleInterval()));
         calendarView.setOnPreviousPageChangeListener(onCalendarPageChangeListener);
         calendarView.setOnForwardPageChangeListener(onCalendarPageChangeListener);
@@ -73,12 +58,6 @@ public class MonthFragment extends Fragment implements Selectable, EventManageab
                 eventDay -> {
                     Global.selectedCalendar = eventDay.getCalendar();
                     select();
-                    Toast.makeText(
-                            getActivity(),
-                            //Constants.fullDateFormat.format(Global.selectedCalendar.getTime()),
-                            Constants.fullDateFormat.format(calendarView.getCurrentPageDate().getTime()),
-                            Toast.LENGTH_SHORT
-                    ).show();
                 }
         );
         onCalendarPageChangeListener.onChange();//костыль?
@@ -88,18 +67,8 @@ public class MonthFragment extends Fragment implements Selectable, EventManageab
 
     @Override
     public void select() {
-        /**default*/
-        /*calendarView.setDate(
-                Optional.ofNullable(Global.selectedCalendar)
-                        .orElse(Calendar.getInstance())
-                        .getTimeInMillis()
-        );*/
-        /**applandeo*/
         try {
-            calendarView.setDate(
-                    Optional.ofNullable(Global.selectedCalendar)
-                            .orElse(Calendar.getInstance())
-            );
+            calendarView.setDate(Global.selectedCalendar);
         } catch (OutOfDateRangeException e) {
             e.printStackTrace();
         }
@@ -118,18 +87,6 @@ public class MonthFragment extends Fragment implements Selectable, EventManageab
 
     @Override
     public void setEvents(List<Event> eventList) {
-        /*Calendar from = calendarView.getCurrentPageDate();
-        Calendar to = (Calendar) from.clone();
-        to.add(Calendar.MONTH, 1);
-        Calendar stop = (Calendar) to.clone();
-        List<EventDay> eventDayList = new ArrayList<>();
-
-        try {
-            monthEventList = StubEventManager.getInstance().get(new CalendarInterval(from, to));
-        } catch (Exception e) {
-            e.printStackTrace();
-            return;
-        }*/
         monthEventList = eventList;
         CalendarInterval calendarInterval = getVisibleInterval();
         Calendar
@@ -139,7 +96,6 @@ public class MonthFragment extends Fragment implements Selectable, EventManageab
         List<EventDay> eventDayList = new ArrayList<>();
 
         for (
-//                to.add(Calendar.MONTH, -1), to.set(Calendar.DAY_OF_MONTH, 2);
                 to.set(Calendar.DAY_OF_MONTH, 2);
                 from.before(stop);
                 from.add(Calendar.DAY_OF_MONTH, 1), to.add(Calendar.DAY_OF_MONTH, 1)

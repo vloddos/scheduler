@@ -2,10 +2,8 @@ package com.example.android.scheduler.fragments;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
@@ -27,7 +25,6 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class DayFragment extends Fragment implements Selectable, EventManageable {
@@ -94,33 +91,15 @@ public class DayFragment extends Fragment implements Selectable, EventManageable
 
     @Override
     public void select() {
-        Calendar calendar = Optional.ofNullable(Global.selectedCalendar).orElse(Calendar.getInstance());
+        Calendar calendar = Global.selectedCalendar;
         dayOfWeek.setText(daysOfWeek.get(calendar.get(Calendar.DAY_OF_WEEK)));
         date.setText(Constants.shortDateFormat.format(calendar.getTime()));
     }
 
     private List<Event> dayEventList;
 
-    //@RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void setEvents(List<Event> eventList) {//must call after select
-        /*Calendar from = Calendar.getInstance();
-        Calendar to;
-        List<Event> dayEventList;
-
-        try {
-            from.setTime(Constants.shortDateFormat.parse(date.getText().toString()));
-            to = (Calendar) from.clone();
-            to.add(Calendar.DAY_OF_YEAR, 1);
-            //to.add(Calendar.SECOND, -1);//dd.MM.YYYY 23:59:59
-
-            dayEventList = StubEventManager.getInstance().get(new CalendarInterval(from, to));
-        } catch (Exception e) {
-            e.printStackTrace();
-            return;
-        }
-
-        to.add(Calendar.DAY_OF_YEAR, -1);*/
         dayEventList = eventList;
         CalendarInterval calendarInterval = getVisibleInterval();
         Calendar from = calendarInterval.getFrom(), to = (Calendar) from.clone();
@@ -129,7 +108,6 @@ public class DayFragment extends Fragment implements Selectable, EventManageable
             TextView h = (TextView) hours.getChildAt(i);
 
             from.set(Calendar.HOUR_OF_DAY, i);
-            //to.set(Calendar.HOUR_OF_DAY, i);
             to.set(Calendar.HOUR_OF_DAY, i + 1);
             CalendarInterval interval = new CalendarInterval(from, to);
 
@@ -139,12 +117,6 @@ public class DayFragment extends Fragment implements Selectable, EventManageable
                 if (interval.isIntersect(e.interval))
                     hourEventLists[i].add(e);// FIXME: 18.03.2019 clone???????????
 
-            /*String text = String.join(
-                    ";",
-                    hourEventLists[i].stream()
-                            .map(e -> e.name)
-                            .collect(Collectors.toList())
-            );*/
             String text = hourEventLists[i].stream()
                     .map(e -> e.name)
                     .collect(Collectors.joining(";"));
@@ -162,14 +134,12 @@ public class DayFragment extends Fragment implements Selectable, EventManageable
         }
     }
 
-    //    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void addEvent(Event event) {
         dayEventList.add(event);
         setEvents(dayEventList);
     }
 
-    //    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void removeEvent(int id) {
         for (int i = 0; i < dayEventList.size(); ++i)
@@ -180,7 +150,6 @@ public class DayFragment extends Fragment implements Selectable, EventManageable
         setEvents(dayEventList);
     }
 
-    //    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void updateEvent(Event event) {
         if (event.interval.isIntersect(getVisibleInterval())) {
@@ -208,11 +177,7 @@ public class DayFragment extends Fragment implements Selectable, EventManageable
         return new CalendarInterval(from, to);
     }
 
-    //    @RequiresApi(api = Build.VERSION_CODES.O)
     public void change(View view) {
-        if (Global.selectedCalendar == null)
-            Global.selectedCalendar = Calendar.getInstance();
-
         Global.selectedCalendar.add(Calendar.DAY_OF_MONTH, view.getId() == leftButton.getId() ? -1 : 1);//Calendar.DAY_OF_YEAR???
 
         select();

@@ -18,6 +18,7 @@ import com.example.android.scheduler.fragments.MonthFragment;
 import com.example.android.scheduler.fragments.Selectable;
 import com.example.android.scheduler.fragments.WeekFragment;
 import com.example.android.scheduler.global.CalendarInterval;
+import com.example.android.scheduler.global.Constants;
 import com.example.android.scheduler.global.Global;
 import com.example.android.scheduler.models.Event;
 
@@ -78,15 +79,8 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
     }
 
-    /*@Override
-    protected void onStart() {
-        super.onStart();
-
-        onPageChangeListener.onPageSelected(viewPager.getCurrentItem());
-    }*/
-
     public void today(View view) {
-        Global.selectedCalendar = null;
+        Global.selectedCalendar = Calendar.getInstance();
         onPageChangeListener.onPageSelected(viewPager.getCurrentItem());
     }
 
@@ -112,13 +106,23 @@ public class MainActivity extends AppCompatActivity {
                 }[viewPager.getCurrentItem()]
         ).setEvents();*/
 //        onPageChangeListener.onPageSelected(viewPager.getCurrentItem());
+        Constants.syncTimeZone();
+        recreate();//все активити пересоздается целиком или viewpager надо очищать?
     }
 
     public void addEvent(View view) {
         Intent intent = new Intent(this, EventActivity.class);
         intent.putExtra("add", true);
 
-        Calendar from = Calendar.getInstance();
+        Calendar
+                now = Calendar.getInstance(),
+                from = (Calendar) Global.selectedCalendar.clone();
+
+        from.set(Calendar.HOUR_OF_DAY, now.get(Calendar.HOUR_OF_DAY));
+        from.set(Calendar.MINUTE, now.get(Calendar.MINUTE));
+        from.set(Calendar.SECOND, 0);
+        from.set(Calendar.MILLISECOND, 0);
+
         Calendar to = (Calendar) from.clone();
         to.add(Calendar.HOUR_OF_DAY, 1);
 
@@ -127,11 +131,10 @@ public class MainActivity extends AppCompatActivity {
                 new Event(
                         new Random().nextInt(),
                         "new event",
-                        new CalendarInterval(from, to),// FIXME: 11.07.2019 selectedCalendar date and current hour
+                        new CalendarInterval(from, to),
                         "description"
                 )
         );
-//        startActivity(intent);
         startActivityForResult(intent, ADD_EVENT_REQUEST);
     }
 
