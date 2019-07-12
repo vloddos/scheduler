@@ -1,21 +1,24 @@
 package com.example.android.scheduler.fragments;
 
 import android.content.Context;
-import android.graphics.Color;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
+import android.widget.ExpandableListView;
 import android.widget.TextView;
 
 import com.example.android.scheduler.R;
+import com.example.android.scheduler.activities.EventActivity;
 import com.example.android.scheduler.activities.MainActivity;
 import com.example.android.scheduler.client.StubEventManager;
+import com.example.android.scheduler.fragments.adapters.HourExpandableListAdapter;
 import com.example.android.scheduler.global.CalendarInterval;
 import com.example.android.scheduler.global.Constants;
 import com.example.android.scheduler.global.Global;
@@ -25,9 +28,10 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class DayFragment extends Fragment implements Selectable, EventManageable {
+
+    public static final String LOG_TAG = DayFragment.class.getSimpleName();
 
     public static final String title = "day";
 
@@ -44,19 +48,15 @@ public class DayFragment extends Fragment implements Selectable, EventManageable
         daysOfWeek.put(Calendar.SUNDAY, "вс");
     }
 
-    private ArrayList<Event>[] hourEventLists = new ArrayList[24];
-
     public TextView dayOfWeek;
     public TextView date;
 
-    public LinearLayout hours;
+    public ExpandableListView events;// TODO: 13.07.2019 try set adapter once and reset groups only
 
     public Button leftButton;
     public Button rightButton;
 
     public DayFragment() {
-        for (int i = 0; i < hourEventLists.length; ++i)
-            hourEventLists[i] = new ArrayList<>();
     }
 
     @Override
@@ -71,14 +71,12 @@ public class DayFragment extends Fragment implements Selectable, EventManageable
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_day, container, false);
 
         dayOfWeek = view.findViewById(R.id.day_of_week);
         date = view.findViewById(R.id.date);
-
-        hours = view.findViewById(R.id.hours);
+        events = view.findViewById(R.id.events);
 
         leftButton = view.findViewById(R.id.leftButton);
         leftButton.setOnClickListener(this::change);
@@ -103,34 +101,51 @@ public class DayFragment extends Fragment implements Selectable, EventManageable
         dayEventList = eventList;
         CalendarInterval calendarInterval = getVisibleInterval();
         Calendar from = calendarInterval.getFrom(), to = (Calendar) from.clone();
+        ArrayList<ArrayList<Event>> groups = new ArrayList<>();
 
-        for (int i = 0; i < hours.getChildCount(); ++i) {
-            TextView h = (TextView) hours.getChildAt(i);
+        for (int i = 0; i < 24; ++i) {
+            groups.add(new ArrayList<>());
 
             from.set(Calendar.HOUR_OF_DAY, i);
             to.set(Calendar.HOUR_OF_DAY, i + 1);
             CalendarInterval interval = new CalendarInterval(from, to);
 
-            hourEventLists[i].clear();
-
             for (Event e : dayEventList)
                 if (interval.isIntersect(e.interval))
-                    hourEventLists[i].add(e);// FIXME: 18.03.2019 clone???????????
+                    groups.get(i).add(e);// FIXME: 18.03.2019 clone???????????
+        }
+        /*
+        при "экономии" памяти вылетает(а причина вылета скорее всего фиксится костылями(но это не точно)),
+        и наверное это не так уж плохо в принципе пересоздавать кучу компонент
+        */
+        events.setAdapter(
+                new HourExpandableListAdapter(
+                        getActivity(),
+                        groups,
+                        event -> {
+                            Intent intent = new Intent(getActivity(), EventActivity.class);
+                            intent.putExtra("event", event);
+                            startActivityForResult(intent, MainActivity.UPDATE_EVENT_REQUEST);
+                        }
+                )
+        );
+    }
 
-            String text = hourEventLists[i].stream()
-                    .map(e -> e.name)
-                    .collect(Collectors.joining(";"));
-
-            if (text.length() > 50)
-                text = text.substring(0, 47) + "...";
-
-            h.setText(text);
-            if (text.equals(""))
-                h.setBackgroundColor(Color.TRANSPARENT);
-            else {
-                h.setTextColor(Color.WHITE);
-                h.setBackgroundColor(Color.BLUE);
-            }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.i(LOG_TAG, "onActivityResult from DayFragment was called, request code:" + requestCode);
+        switch (requestCode) {
+            case MainActivity.REMOVE_EVENT_REQUEST:
+                removeEvent(data.getIntExtra("id", -1));
+                break;
+            case MainActivity.UPDATE_EVENT_REQUEST:
+                Event event = (Event) data.getSerializableExtra("event");
+                if (event == null)//for remove button in event activity костыль?
+                    removeEvent(data.getIntExtra("id", -1));
+                else
+                    updateEvent(event);
+                break;
         }
     }
 
@@ -182,16 +197,5 @@ public class DayFragment extends Fragment implements Selectable, EventManageable
 
         select();
         setEvents(StubEventManager.getInstance().get(getVisibleInterval()));
-    }
-
-    public Calendar getCalendar(View view) throws ParseException {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(Constants.shortDateFormat.parse(date.getText().toString()));
-        calendar.set(Calendar.HOUR_OF_DAY, hours.indexOfChild(view));
-        return calendar;
-    }
-
-    public ArrayList<Event> getEvents(View view) {
-        return hourEventLists[hours.indexOfChild(view)];
     }
 }

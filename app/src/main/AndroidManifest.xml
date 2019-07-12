@@ -12,14 +12,6 @@
 
         <activity
             android:name=".activities.EventActivity"
-            android:parentActivityName=".activities.EventListActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activities.EventListActivity" />
-        </activity>
-
-        <activity
-            android:name=".activities.EventListActivity"
             android:parentActivityName=".activities.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

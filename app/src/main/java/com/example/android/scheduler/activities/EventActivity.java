@@ -171,12 +171,12 @@ public class EventActivity extends AppCompatActivity {
     public static class CalendarIntervalDialogFragment extends DialogFragment {
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            builder
-                    .setMessage("Invalid calendar interval\nstart datetime>end datetime")
-                    .setNeutralButton("ok", (dialog, id) -> {
-                    });
-            return builder.create();
+            return
+                    new AlertDialog.Builder(getActivity())
+                            .setMessage("Invalid calendar interval\nstart datetime>end datetime")
+                            .setNeutralButton("ok", (dialog, id) -> {
+                            })
+                            .create();
         }
     }
 }

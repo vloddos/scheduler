@@ -7,13 +7,14 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 
 import com.example.android.scheduler.R;
 import com.example.android.scheduler.client.StubEventManager;
 import com.example.android.scheduler.fragments.DayFragment;
 import com.example.android.scheduler.fragments.EventManageable;
-import com.example.android.scheduler.fragments.MainFragmentPagerAdapter;
+import com.example.android.scheduler.fragments.adapters.MainFragmentPagerAdapter;
 import com.example.android.scheduler.fragments.MonthFragment;
 import com.example.android.scheduler.fragments.Selectable;
 import com.example.android.scheduler.fragments.WeekFragment;
@@ -22,7 +23,6 @@ import com.example.android.scheduler.global.Constants;
 import com.example.android.scheduler.global.Global;
 import com.example.android.scheduler.models.Event;
 
-import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Random;
 
@@ -31,9 +31,9 @@ import java.util.Random;
 // FIXME: 18.03.2019 Calendar.MONTH 0/1?
 public class MainActivity extends AppCompatActivity {
 
-    private static final int ADD_EVENT_REQUEST = 0;
-    private static final int REMOVE_EVENT_REQUEST = 1;
-    private static final int UPDATE_EVENT_REQUEST = 2;
+    public static final int ADD_EVENT_REQUEST = 0;
+    public static final int REMOVE_EVENT_REQUEST = 1;
+    public static final int UPDATE_EVENT_REQUEST = 2;
 
     public static final String LOG_TAG = MainActivity.class.getSimpleName();
 
@@ -84,19 +84,6 @@ public class MainActivity extends AppCompatActivity {
         onPageChangeListener.onPageSelected(viewPager.getCurrentItem());
     }
 
-    public void eventListActivity(View view) throws ParseException {
-        switch (viewPager.getCurrentItem()) {
-            case 1:
-                break;
-            case 2:
-                Intent intent = new Intent(this, EventListActivity.class);
-                intent.putExtra("calendar", dayFragment.getCalendar(view));
-                intent.putExtra("eventList", dayFragment.getEvents(view));
-                startActivity(intent);
-                break;
-        }
-    }
-
     //возможно понадобится в будущем
     public void sync(View view) {
         //кнопка должна крутиться пока идет синхронизация
@@ -142,6 +129,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
+            Log.i(LOG_TAG, "onActivityResult from MainActivity was called, request code:" + requestCode);//65538
             switch (requestCode) {
                 case ADD_EVENT_REQUEST:
                     (

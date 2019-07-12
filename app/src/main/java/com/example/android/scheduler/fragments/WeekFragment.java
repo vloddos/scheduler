@@ -17,6 +17,7 @@ import com.example.android.scheduler.global.Global;
 import com.example.android.scheduler.models.Event;
 
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 
 public class WeekFragment extends Fragment implements Selectable, EventManageable {

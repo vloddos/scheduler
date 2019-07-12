@@ -1,10 +1,14 @@
-package com.example.android.scheduler.fragments;
+package com.example.android.scheduler.fragments.adapters;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+
+import com.example.android.scheduler.fragments.DayFragment;
+import com.example.android.scheduler.fragments.MonthFragment;
+import com.example.android.scheduler.fragments.WeekFragment;
 
 public class MainFragmentPagerAdapter extends FragmentPagerAdapter {
 
