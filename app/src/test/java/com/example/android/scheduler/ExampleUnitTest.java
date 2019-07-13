@@ -78,9 +78,18 @@ public class ExampleUnitTest {
     @Test
     public void addDayOfMonth() throws ParseException {
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(Constants.shortDateFormat.parse("31.07.2019"));
+        calendar.setTime(Constants.shortDateFormat.parse("31.12.2019"));
         System.out.println(Constants.fullDateFormat.format(calendar.getTime()));
-        calendar.add(Calendar.DAY_OF_YEAR, 1);
+        calendar.add(Calendar.DAY_OF_MONTH, 1);
+        System.out.println(Constants.fullDateFormat.format(calendar.getTime()));
+    }
+
+    @Test
+    public void addWeekOfYear() throws ParseException {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(Constants.shortDateFormat.parse("20.12.2019"));
+        System.out.println(Constants.fullDateFormat.format(calendar.getTime()));
+        calendar.add(Calendar.WEEK_OF_YEAR, 1);
         System.out.println(Constants.fullDateFormat.format(calendar.getTime()));
     }
 

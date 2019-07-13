@@ -1,33 +1,32 @@
 package com.example.android.scheduler.fragments.adapters;
 
 import android.content.Context;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.ExpandableListView;
 import android.widget.TextView;
 
 import com.example.android.scheduler.R;
-import com.example.android.scheduler.global.Constants;
-import com.example.android.scheduler.models.Event;
 
 import java.util.ArrayList;
-import java.util.function.Consumer;
 
-public class HourExpandableListAdapter extends BaseExpandableListAdapter {
+public class DayExpandableListAdapter extends BaseExpandableListAdapter {
 
     private Context mContext;
-    private ArrayList<ArrayList<Event>> mGroups;
-    private Consumer<Event> eventConsumer;
+    private ArrayList<ArrayList<ExpandableListView>> mGroups;
+    private ArrayList<Pair<String, String>> groupContent;
 
-    public HourExpandableListAdapter(
+    public DayExpandableListAdapter(
             Context context,
-            ArrayList<ArrayList<Event>> groups,
-            Consumer<Event> eventConsumer
+            ArrayList<ArrayList<ExpandableListView>> groups,
+            ArrayList<Pair<String, String>> groupContent
     ) {
         mContext = context;
         mGroups = groups;
-        this.eventConsumer = eventConsumer;
+        this.groupContent = groupContent;
     }
 
     @Override
@@ -71,7 +70,7 @@ public class HourExpandableListAdapter extends BaseExpandableListAdapter {
 
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.hour_view, null);
+            convertView = inflater.inflate(R.layout.day_view, null);
         }
 
         if (isExpanded) {
@@ -80,36 +79,21 @@ public class HourExpandableListAdapter extends BaseExpandableListAdapter {
             //Изменяем что-нибудь, если текущая Group скрыта
         }
 
-        TextView hour = convertView.findViewById(R.id.hour);
-        hour.setText("" + groupPosition);
+        TextView day = convertView.findViewById(R.id.day);
+        day.setText(groupContent.get(groupPosition).first);
+
+        TextView date = convertView.findViewById(R.id.date);
+        date.setText(groupContent.get(groupPosition).second);
 
         return convertView;
     }
 
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild,
-                             View convertView, ViewGroup parent) {
+                             View convertView, ViewGroup parent) {// TODO: 13.07.2019 event onclick
         if (convertView == null) {
-            LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.event_view, null);
+            convertView = (View) getChild(groupPosition, childPosition);
         }
-
-        Event event = mGroups.get(groupPosition).get(childPosition);
-
-        TextView event_name = convertView.findViewById(R.id.event_name);
-        event_name.setText(event.name);
-
-        TextView event_interval = convertView.findViewById(R.id.event_interval);
-        event_interval.setText(
-                String.format(
-                        "from %s to %s",
-                        Constants.dateTimeFormat.format(event.interval.getFrom().getTime()),
-                        Constants.dateTimeFormat.format(event.interval.getTo().getTime())
-                )
-        );
-        convertView.findViewById(R.id.event_layout).setOnClickListener(
-                v -> eventConsumer.accept(event)
-        );
 
         return convertView;
     }

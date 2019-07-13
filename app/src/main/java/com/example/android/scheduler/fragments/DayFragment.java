@@ -135,18 +135,19 @@ public class DayFragment extends Fragment implements Selectable, EventManageable
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Log.i(LOG_TAG, "onActivityResult from DayFragment was called, request code:" + requestCode);
-        switch (requestCode) {
-            case MainActivity.REMOVE_EVENT_REQUEST:
-                removeEvent(data.getIntExtra("id", -1));
-                break;
-            case MainActivity.UPDATE_EVENT_REQUEST:
-                Event event = (Event) data.getSerializableExtra("event");
-                if (event == null)//for remove button in event activity костыль?
+        if (data != null)
+            switch (requestCode) {
+                case MainActivity.REMOVE_EVENT_REQUEST:
                     removeEvent(data.getIntExtra("id", -1));
-                else
-                    updateEvent(event);
-                break;
-        }
+                    break;
+                case MainActivity.UPDATE_EVENT_REQUEST:
+                    Event event = (Event) data.getSerializableExtra("event");
+                    if (event == null)//for remove button in event activity костыль?
+                        removeEvent(data.getIntExtra("id", -1));
+                    else
+                        updateEvent(event);
+                    break;
+            }
     }
 
     @Override
@@ -180,13 +181,16 @@ public class DayFragment extends Fragment implements Selectable, EventManageable
 
     @Override
     public CalendarInterval getVisibleInterval() {
-        Calendar from = Calendar.getInstance();
+        /*Calendar from = Calendar.getInstance();
         try {
             from.setTime(Constants.shortDateFormat.parse(date.getText().toString()));
         } catch (ParseException e) {
             e.printStackTrace();
             return null;
-        }
+        }*/
+        Calendar from = (Calendar) Global.selectedCalendar.clone();//visible day is always selected
+        from.set(from.get(Calendar.YEAR), from.get(Calendar.MONTH), from.get(Calendar.DAY_OF_MONTH), 0, 0, 0);
+        from.set(Calendar.MILLISECOND, 0);
         Calendar to = (Calendar) from.clone();
         to.add(Calendar.DAY_OF_YEAR, 1);
         return new CalendarInterval(from, to);
@@ -194,7 +198,6 @@ public class DayFragment extends Fragment implements Selectable, EventManageable
 
     public void change(View view) {
         Global.selectedCalendar.add(Calendar.DAY_OF_MONTH, view.getId() == leftButton.getId() ? -1 : 1);//Calendar.DAY_OF_YEAR???
-
         select();
         setEvents(StubEventManager.getInstance().get(getVisibleInterval()));
     }
