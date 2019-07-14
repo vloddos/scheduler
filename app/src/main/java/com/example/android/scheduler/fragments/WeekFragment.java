@@ -58,6 +58,7 @@ public class WeekFragment extends Fragment implements Selectable, EventManageabl
     private Button rightButton;
 
     private Consumer<View> selectDayOfWeek = v -> {
+        Global.selectedCalendar = getVisibleInterval().getFrom();
         Global.selectedCalendar.set(Calendar.DAY_OF_WEEK, day_date.reverseGet(v));
         if (selectedView != null) {
             selectedView.setBackgroundColor(Color.TRANSPARENT);
@@ -321,6 +322,19 @@ public class WeekFragment extends Fragment implements Selectable, EventManageabl
 
     public void change(View view) {
         currentPageCalendar.add(Calendar.WEEK_OF_YEAR, view.getId() == leftButton.getId() ? -1 : 1);
+        CalendarInterval interval = getVisibleInterval();
+        Calendar from = interval.getFrom(), to = interval.getTo();
+        if ((from.before(Global.selectedCalendar) || from.equals(Global.selectedCalendar)) &&
+                Global.selectedCalendar.before(to)
+        ) {
+            selectedView.setBackgroundColor(Color.BLUE);
+            ((TextView) selectedView.findViewById(R.id.day)).setTextColor(Color.WHITE);
+            ((TextView) selectedView.findViewById(R.id.date)).setTextColor(Color.WHITE);
+        } else {
+            selectedView.setBackgroundColor(Color.TRANSPARENT);
+            ((TextView) selectedView.findViewById(R.id.day)).setTextColor(Color.BLACK);
+            ((TextView) selectedView.findViewById(R.id.date)).setTextColor(Color.BLACK);
+        }
         setEvents(StubEventManager.getInstance().get(getVisibleInterval()));
     }
 }
