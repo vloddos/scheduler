@@ -39,8 +39,8 @@ dependencies {
     implementation 'com.android.support:cardview-v7:28.0.0'
     implementation 'com.android.support:gridlayout-v7:28.0.0'
     implementation 'android.arch.navigation:navigation-fragment:1.0.0'
-    implementation  'com.applandeo:material-calendar-view:1.5.1'
-
-    //implementation 'com.github.prolificinteractive:material-calendarview:2.0.1'
-    //implementation group: 'net.time4j', name: 'time4j-android', version: '4.2-2018i'
+    implementation 'com.applandeo:material-calendar-view:1.5.1'
+    implementation 'com.google.firebase:firebase-core:16.0.9'
+    implementation 'com.google.firebase:firebase-auth:17.0.0'
 }
+apply plugin: 'com.google.gms.google-services'
