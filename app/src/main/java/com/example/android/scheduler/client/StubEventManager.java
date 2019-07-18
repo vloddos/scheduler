@@ -1,14 +1,12 @@
 package com.example.android.scheduler.client;
 
 import com.example.android.scheduler.global.CalendarInterval;
-import com.example.android.scheduler.global.Constants;
 import com.example.android.scheduler.models.Event;
 
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class StubEventManager implements EventService {
 
@@ -83,16 +81,12 @@ public class StubEventManager implements EventService {
 
     @Override
     public List<Event> get(CalendarInterval interval) {// FIXME: 18.03.2019 remove clone?
-        /*List<Event> el = new ArrayList<>();
+        List<Event> el = new ArrayList<>();
         for (Event e : eventList)
             if (e.interval.isIntersect(interval))
                 el.add((Event) e.clone());
 
-        return el;*/
-        return
-                eventList.stream()
-                        .filter(e -> e.interval.isIntersect(interval))
-                        .collect(Collectors.toList());
+        return el;
     }
 
     @Override

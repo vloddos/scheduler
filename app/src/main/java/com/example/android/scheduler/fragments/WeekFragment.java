@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.example.android.scheduler.R;
 import com.example.android.scheduler.activities.EventActivity;
 import com.example.android.scheduler.activities.MainActivity;
+import com.example.android.scheduler.activities.RequestCodes;
 import com.example.android.scheduler.client.StubEventManager;
 import com.example.android.scheduler.fragments.adapters.HourExpandableListAdapter;
 import com.example.android.scheduler.global.BiHashMap;
@@ -36,7 +37,7 @@ public class WeekFragment extends Fragment implements Selectable, EventManageabl
 
     private Calendar currentPageCalendar;
     private View selectedView;
-    private BiHashMap<Integer, View> day_date = new BiHashMap<>();
+    private BiHashMap<Integer, View> day_date = new BiHashMap<>();// FIXME: 18.07.2019 use bisparsearray?
 
     private ExpandableListView eventsMonday;
     private ExpandableListView eventsTuesday;
@@ -259,7 +260,7 @@ public class WeekFragment extends Fragment implements Selectable, EventManageabl
                             event -> {
                                 Intent intent = new Intent(getActivity(), EventActivity.class);
                                 intent.putExtra("event", event);
-                                startActivityForResult(intent, MainActivity.UPDATE_EVENT_REQUEST);
+                                startActivityForResult(intent, RequestCodes.UPDATE_EVENT);
                             }
                     )
             );
@@ -271,10 +272,10 @@ public class WeekFragment extends Fragment implements Selectable, EventManageabl
         super.onActivityResult(requestCode, resultCode, data);
         if (data != null)
             switch (requestCode) {
-                case MainActivity.REMOVE_EVENT_REQUEST:
+                case RequestCodes.REMOVE_EVENT:
                     removeEvent(data.getIntExtra("id", -1));
                     break;
-                case MainActivity.UPDATE_EVENT_REQUEST:
+                case RequestCodes.UPDATE_EVENT:
                     Event event = (Event) data.getSerializableExtra("event");
                     if (event == null)//for remove button in event activity костыль?
                         removeEvent(data.getIntExtra("id", -1));

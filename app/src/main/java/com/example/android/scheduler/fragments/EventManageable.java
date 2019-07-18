@@ -11,7 +11,7 @@ public interface EventManageable {
 
     void addEvent(Event event);
 
-    void removeEvent(int id);//todo refactor передавать объект вместо id чтобы удалить методом arraylist в 1 строку? использовать ссылки без клонирования?
+    void removeEvent(int id);
 
     void updateEvent(Event event);
 

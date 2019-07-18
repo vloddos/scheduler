@@ -1,4 +1,4 @@
-package com.example.android.scheduler;
+package com.example.android.scheduler.dialogs;
 
 import android.app.Dialog;
 import android.app.TimePickerDialog;
@@ -13,12 +13,12 @@ import com.example.android.scheduler.global.Constants;
 import java.text.ParseException;
 import java.util.Calendar;
 
-public class TimePickerFragment extends DialogFragment implements TimePickerDialog.OnTimeSetListener {
+public class TimePickerDialogFragment extends DialogFragment implements TimePickerDialog.OnTimeSetListener {
 
     private TextView textView;
 
-    public static TimePickerFragment newInstance(TextView textView) {
-        TimePickerFragment f = new TimePickerFragment();
+    public static TimePickerDialogFragment newInstance(TextView textView) {
+        TimePickerDialogFragment f = new TimePickerDialogFragment();
         f.textView = textView;//args.putSerializable?
         return f;
     }
@@ -41,13 +41,6 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
                         DateFormat.is24HourFormat(getActivity())
                 );
     }
-
-    /*@Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putInt("hour", hour);
-        outState.putInt("minute", minute);
-    }*/
 
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {

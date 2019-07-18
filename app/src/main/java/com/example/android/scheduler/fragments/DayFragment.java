@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.example.android.scheduler.R;
 import com.example.android.scheduler.activities.EventActivity;
 import com.example.android.scheduler.activities.MainActivity;
+import com.example.android.scheduler.activities.RequestCodes;
 import com.example.android.scheduler.client.StubEventManager;
 import com.example.android.scheduler.fragments.adapters.HourExpandableListAdapter;
 import com.example.android.scheduler.global.CalendarInterval;
@@ -24,7 +25,6 @@ import com.example.android.scheduler.global.Constants;
 import com.example.android.scheduler.global.Global;
 import com.example.android.scheduler.models.Event;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -51,7 +51,7 @@ public class DayFragment extends Fragment implements Selectable, EventManageable
     public TextView dayOfWeek;
     public TextView date;
 
-    public ExpandableListView events;// TODO: 13.07.2019 try set adapter once and reset groups only
+    public ExpandableListView events;
 
     public Button leftButton;
     public Button rightButton;
@@ -114,10 +114,7 @@ public class DayFragment extends Fragment implements Selectable, EventManageable
                 if (interval.isIntersect(e.interval))
                     groups.get(i).add(e);// FIXME: 18.03.2019 clone???????????
         }
-        /*
-        при "экономии" памяти вылетает(а причина вылета скорее всего фиксится костылями(но это не точно)),
-        и наверное это не так уж плохо в принципе пересоздавать кучу компонент
-        */
+
         events.setAdapter(
                 new HourExpandableListAdapter(
                         getActivity(),
@@ -125,7 +122,7 @@ public class DayFragment extends Fragment implements Selectable, EventManageable
                         event -> {
                             Intent intent = new Intent(getActivity(), EventActivity.class);
                             intent.putExtra("event", event);
-                            startActivityForResult(intent, MainActivity.UPDATE_EVENT_REQUEST);
+                            startActivityForResult(intent, RequestCodes.UPDATE_EVENT);
                         }
                 )
         );
@@ -137,10 +134,10 @@ public class DayFragment extends Fragment implements Selectable, EventManageable
         Log.i(LOG_TAG, "onActivityResult from DayFragment was called, request code:" + requestCode);
         if (data != null)
             switch (requestCode) {
-                case MainActivity.REMOVE_EVENT_REQUEST:
+                case RequestCodes.REMOVE_EVENT:
                     removeEvent(data.getIntExtra("id", -1));
                     break;
-                case MainActivity.UPDATE_EVENT_REQUEST:
+                case RequestCodes.UPDATE_EVENT:
                     Event event = (Event) data.getSerializableExtra("event");
                     if (event == null)//for remove button in event activity костыль?
                         removeEvent(data.getIntExtra("id", -1));
@@ -181,13 +178,6 @@ public class DayFragment extends Fragment implements Selectable, EventManageable
 
     @Override
     public CalendarInterval getVisibleInterval() {
-        /*Calendar from = Calendar.getInstance();
-        try {
-            from.setTime(Constants.shortDateFormat.parse(date.getText().toString()));
-        } catch (ParseException e) {
-            e.printStackTrace();
-            return null;
-        }*/
         Calendar from = (Calendar) Global.selectedCalendar.clone();//visible day is always selected
         from.set(from.get(Calendar.YEAR), from.get(Calendar.MONTH), from.get(Calendar.DAY_OF_MONTH), 0, 0, 0);
         from.set(Calendar.MILLISECOND, 0);

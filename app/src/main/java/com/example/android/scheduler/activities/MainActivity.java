@@ -12,6 +12,7 @@ import android.view.View;
 
 import com.example.android.scheduler.R;
 import com.example.android.scheduler.client.StubEventManager;
+import com.example.android.scheduler.dialogs.SignOutDialogFragment;
 import com.example.android.scheduler.fragments.DayFragment;
 import com.example.android.scheduler.fragments.EventManageable;
 import com.example.android.scheduler.fragments.MonthFragment;
@@ -26,14 +27,8 @@ import com.example.android.scheduler.models.Event;
 import java.util.Calendar;
 import java.util.Random;
 
-// TODO: 18.03.2019 activities connection
-// TODO: 18.03.2019 remake week/day view
 // FIXME: 18.03.2019 Calendar.MONTH 0/1?
 public class MainActivity extends AppCompatActivity {
-
-    public static final int ADD_EVENT_REQUEST = 0;
-    public static final int REMOVE_EVENT_REQUEST = 1;
-    public static final int UPDATE_EVENT_REQUEST = 2;
 
     public static final String LOG_TAG = MainActivity.class.getSimpleName();
 
@@ -79,22 +74,25 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
     }
 
+    @Override
+    public void onBackPressed() {
+        SignOutDialogFragment dialog = new SignOutDialogFragment();
+        dialog.setPositiveListener(
+                (dialog1, id) -> {
+                    setResult(RESULT_OK);
+                    super.onBackPressed();
+                }
+        );
+        dialog.show(getSupportFragmentManager(), "");
+    }
+
     public void today(View view) {
         Global.selectedCalendar = Calendar.getInstance();
         onPageChangeListener.onPageSelected(viewPager.getCurrentItem());
     }
 
-    //возможно понадобится в будущем
     public void sync(View view) {
-        //кнопка должна крутиться пока идет синхронизация
-        /*(
-                (EventManageable) new Fragment[]{
-                        this.monthFragment, this.weekFragment, this.dayFragment
-                }[viewPager.getCurrentItem()]
-        ).setEvents();*/
-//        onPageChangeListener.onPageSelected(viewPager.getCurrentItem());
-        Constants.syncTimeZone();
-        recreate();//все активити пересоздается целиком или viewpager надо очищать?
+
     }
 
     public void addEvent(View view) {
@@ -122,36 +120,19 @@ public class MainActivity extends AppCompatActivity {
                         "description"
                 )
         );
-        startActivityForResult(intent, ADD_EVENT_REQUEST);
+        startActivityForResult(intent, RequestCodes.ADD_EVENT);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            Log.i(LOG_TAG, "onActivityResult from MainActivity was called, request code:" + requestCode);//65538
-            switch (requestCode) {
-                case ADD_EVENT_REQUEST:
-                    (
-                            (EventManageable) new Fragment[]{
-                                    monthFragment, weekFragment, dayFragment
-                            }[viewPager.getCurrentItem()]
-                    ).addEvent((Event) data.getSerializableExtra("event"));
-                    break;
-                case REMOVE_EVENT_REQUEST:
-                    (
-                            (EventManageable) new Fragment[]{
-                                    monthFragment, weekFragment, dayFragment
-                            }[viewPager.getCurrentItem()]
-                    ).removeEvent(((Event) data.getSerializableExtra("event")).getId());
-                    break;
-                case UPDATE_EVENT_REQUEST:
-                    (
-                            (EventManageable) new Fragment[]{
-                                    monthFragment, weekFragment, dayFragment
-                            }[viewPager.getCurrentItem()]
-                    ).updateEvent((Event) data.getSerializableExtra("event"));
-                    break;
+            if (requestCode == RequestCodes.ADD_EVENT && data != null) {
+                (
+                        (EventManageable) new Fragment[]{
+                                monthFragment, weekFragment, dayFragment
+                        }[viewPager.getCurrentItem()]
+                ).addEvent((Event) data.getSerializableExtra("event"));
             }
         }
     }

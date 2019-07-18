@@ -1,7 +1,5 @@
 package com.example.android.scheduler.activities;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -13,9 +11,10 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.example.android.scheduler.DatePickerFragment;
+import com.example.android.scheduler.dialogs.CalendarIntervalDialogFragment;
+import com.example.android.scheduler.dialogs.DatePickerDialogFragment;
 import com.example.android.scheduler.R;
-import com.example.android.scheduler.TimePickerFragment;
+import com.example.android.scheduler.dialogs.TimePickerDialogFragment;
 import com.example.android.scheduler.client.StubEventManager;
 import com.example.android.scheduler.global.CalendarInterval;
 import com.example.android.scheduler.global.Constants;
@@ -105,12 +104,12 @@ public class EventActivity extends AppCompatActivity {
     }
 
     public void showTimePickerDialog(View v) throws ParseException {
-        DialogFragment newFragment = TimePickerFragment.newInstance((TextView) v);
+        DialogFragment newFragment = TimePickerDialogFragment.newInstance((TextView) v);
         newFragment.show(getSupportFragmentManager(), "timePicker");
     }
 
     public void showDatePickerDialog(View v) {
-        DialogFragment newFragment = DatePickerFragment.newInstance((TextView) v);
+        DialogFragment newFragment = DatePickerDialogFragment.newInstance((TextView) v);
         newFragment.show(getSupportFragmentManager(), "datePicker");
     }
 
@@ -134,7 +133,7 @@ public class EventActivity extends AppCompatActivity {
                                     endTime.getText().toString()
                     )
             );
-            event.interval = new CalendarInterval(from, to);//убрать баг с неправильным интервалом
+            event.interval = new CalendarInterval(from, to);
         } catch (ParseException e) {
             e.printStackTrace();
         } catch (IllegalStateException e) {
@@ -166,17 +165,5 @@ public class EventActivity extends AppCompatActivity {
         intent.putExtra("id", event.getId());
         setResult(RESULT_OK, intent);
         finish();
-    }
-
-    public static class CalendarIntervalDialogFragment extends DialogFragment {
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            return
-                    new AlertDialog.Builder(getActivity())
-                            .setMessage("Invalid calendar interval\nstart datetime>end datetime")
-                            .setNeutralButton("ok", (dialog, id) -> {
-                            })
-                            .create();
-        }
     }
 }

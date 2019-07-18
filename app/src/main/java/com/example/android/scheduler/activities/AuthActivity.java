@@ -1,24 +1,20 @@
 package com.example.android.scheduler.activities;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 
 import com.example.android.scheduler.R;
+import com.example.android.scheduler.dialogs.AuthDialogFragment;
+import com.example.android.scheduler.global.Global;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.GetTokenResult;
 
 // TODO: 17.07.2019 FirebaseAuth.AuthStateListener???
 public class AuthActivity extends AppCompatActivity {
@@ -26,13 +22,12 @@ public class AuthActivity extends AppCompatActivity {
     public static final String LOG_TAG = AuthActivity.class.getSimpleName();
 
     private FirebaseAuth auth;
-    private FirebaseUser user;
-    private String token;
 
     private EditText email;
     private EditText password;
     private Button sign_in;
     private Button sign_up;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +38,7 @@ public class AuthActivity extends AppCompatActivity {
         password = findViewById(R.id.password);
         sign_in = findViewById(R.id.sign_in);
         sign_up = findViewById(R.id.sign_up);
+        progressBar = findViewById(R.id.progress_bar);
 
         auth = FirebaseAuth.getInstance();
     }
@@ -73,61 +69,34 @@ public class AuthActivity extends AppCompatActivity {
         return valid;
     }
 
-    public static class AuthDialogFragment extends DialogFragment {
-
-        private String msg;
-        private DialogInterface.OnClickListener listener = (dialog, id) -> {
-        };
-
-        @Override
-        public void setArguments(@Nullable Bundle args) {
-            super.setArguments(args);
-            if (args != null)
-                msg = args.getString("msg");
-        }
-
-        public void setListener(@NonNull DialogInterface.OnClickListener listener) {
-            this.listener = listener;
-        }
-
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            return
-                    new AlertDialog.Builder(getActivity())
-                            .setMessage(msg)
-                            .setNeutralButton(
-                                    "ok",
-                                    listener
-                            )
-                            .create();
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.i(LOG_TAG, "auth on activity result called");
+        if (resultCode == RESULT_OK) {
+            if (requestCode == RequestCodes.SIGN_OUT) {
+                Global.user = null;
+                auth.signOut();
+                Log.i(LOG_TAG, "signed out");
+            }
         }
     }
 
     public void signIn(String email, String password) {
+        progressBar.setVisibility(View.VISIBLE);
         auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(
                 this,
                 task -> {
+                    progressBar.setVisibility(View.GONE);
                     if (task.isSuccessful()) {
-                        user = auth.getCurrentUser();
-                        if (user != null)
-                            user.getIdToken(true).addOnCompleteListener(
-                                    this,
-                                    task1 -> {
-                                        GetTokenResult getTokenResult = task1.getResult();
-                                        if (getTokenResult != null) {
-                                            token = getTokenResult.getToken();
-                                            if (token != null)
-                                                startActivity(
-                                                        new Intent(
-                                                                this,
-                                                                MainActivity.class
-                                                        )
-                                                );
-                                            else
-                                                Log.e(LOG_TAG, "token is null");
-                                        } else
-                                            Log.e(LOG_TAG, "get token result is null");
-                                    }
+                        Global.user = auth.getCurrentUser();
+                        if (Global.user != null)
+                            startActivityForResult(
+                                    new Intent(
+                                            this,
+                                            MainActivity.class
+                                    ),
+                                    RequestCodes.SIGN_OUT
                             );
                         else
                             Log.e(LOG_TAG, "current user is null");
@@ -147,43 +116,33 @@ public class AuthActivity extends AppCompatActivity {
     }
 
     public void signUp(String email, String password) {
+        progressBar.setVisibility(View.VISIBLE);
         auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(
                 this,
                 task -> {
+                    progressBar.setVisibility(View.GONE);
                     if (task.isSuccessful()) {
-                        user = auth.getCurrentUser();
-                        if (user != null)
-                            user.getIdToken(true).addOnCompleteListener(
-                                    this,
-                                    task1 -> {
-                                        GetTokenResult getTokenResult = task1.getResult();
-                                        if (getTokenResult != null) {
-                                            token = getTokenResult.getToken();
-                                            if (token != null) {
-                                                AuthDialogFragment dialog = new AuthDialogFragment();
-                                                Bundle bundle = new Bundle();
-                                                bundle.putString(
-                                                        "msg",
-                                                        "Successful account creation. You will sign in as " + email
-                                                );
-                                                dialog.setArguments(bundle);
-                                                dialog.setListener(
-                                                        (dialog1, id) ->
-                                                                startActivity(
-                                                                        new Intent(
-                                                                                this,
-                                                                                MainActivity.class
-                                                                        )
-                                                                )
-                                                );
-                                                dialog.show(getSupportFragmentManager(), "");
-                                            } else
-                                                Log.e(LOG_TAG, "token is null");
-                                        } else
-                                            Log.e(LOG_TAG, "get token result is null");
-                                    }
+                        Global.user = auth.getCurrentUser();
+                        if (Global.user != null) {
+                            AuthDialogFragment dialog = new AuthDialogFragment();
+                            Bundle bundle = new Bundle();
+                            bundle.putString(
+                                    "msg",
+                                    "Successful account creation. You will sign in as " + email
                             );
-                        else
+                            dialog.setArguments(bundle);
+                            dialog.setListener(
+                                    (dialog1, id) ->
+                                            startActivityForResult(
+                                                    new Intent(
+                                                            this,
+                                                            MainActivity.class
+                                                    ),
+                                                    RequestCodes.SIGN_OUT
+                                            )
+                            );
+                            dialog.show(getSupportFragmentManager(), "");
+                        } else
                             Log.e(LOG_TAG, "current user is null");
                     } else {
                         Exception exception = task.getException();

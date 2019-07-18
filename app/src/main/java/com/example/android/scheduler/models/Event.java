@@ -5,7 +5,6 @@ import com.example.android.scheduler.global.CalendarInterval;
 import java.io.Serializable;
 import java.util.TimeZone;
 
-// TODO: 18.03.2019 remove seconds
 public class Event implements Serializable, Cloneable {
 
     private static final long serialVersionUID = -8023521667978959263L;
@@ -56,8 +55,16 @@ public class Event implements Serializable, Cloneable {
     }
 
     @Override
-    public Object clone() throws CloneNotSupportedException {
-        super.clone();
-        return new Event(id, name, (CalendarInterval) interval.clone(), description);
+    public Object clone() {
+        try {
+            Event event = (Event) super.clone();
+            event.id = id;
+            event.name = name;
+            event.interval = (CalendarInterval) interval.clone();
+            event.description = description;
+            return event;
+        } catch (CloneNotSupportedException e) {
+            throw new InternalError();
+        }
     }
 }

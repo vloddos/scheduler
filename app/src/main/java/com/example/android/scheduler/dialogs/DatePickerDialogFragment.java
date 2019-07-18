@@ -1,4 +1,4 @@
-package com.example.android.scheduler;
+package com.example.android.scheduler.dialogs;
 
 import android.app.Dialog;
 import android.os.Bundle;
@@ -12,12 +12,12 @@ import com.example.android.scheduler.global.Constants;
 import java.text.ParseException;
 import java.util.Calendar;
 
-public class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
+public class DatePickerDialogFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
 
     private TextView textView;
 
-    public static DatePickerFragment newInstance(TextView textView) {
-        DatePickerFragment f = new DatePickerFragment();
+    public static DatePickerDialogFragment newInstance(TextView textView) {
+        DatePickerDialogFragment f = new DatePickerDialogFragment();
         f.textView = textView;//args.putSerializable?
         return f;
     }

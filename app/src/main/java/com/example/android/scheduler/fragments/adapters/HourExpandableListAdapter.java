@@ -74,12 +74,6 @@ public class HourExpandableListAdapter extends BaseExpandableListAdapter {
             convertView = inflater.inflate(R.layout.hour_view, null);
         }
 
-        if (isExpanded) {
-            //Изменяем что-нибудь, если текущая Group раскрыта
-        } else {
-            //Изменяем что-нибудь, если текущая Group скрыта
-        }
-
         TextView hour = convertView.findViewById(R.id.hour);
         hour.setText("" + groupPosition);
 

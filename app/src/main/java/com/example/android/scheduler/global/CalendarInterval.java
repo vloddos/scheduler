@@ -53,8 +53,14 @@ public class CalendarInterval implements Serializable, Cloneable {
     }
 
     @Override
-    public Object clone() throws CloneNotSupportedException {
-        super.clone();
-        return new CalendarInterval(from, to);
+    public Object clone() {
+        try {
+            CalendarInterval calendarInterval = (CalendarInterval) super.clone();
+            calendarInterval.from = (Calendar) from.clone();
+            calendarInterval.to = (Calendar) to.clone();
+            return calendarInterval;
+        } catch (CloneNotSupportedException e) {
+            throw new InternalError();
+        }
     }
 }
